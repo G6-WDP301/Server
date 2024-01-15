@@ -9,3 +9,4 @@ const Role = mongoose.model("Role", new Schema({
         required: true,
     },
 }))
+export default Role;

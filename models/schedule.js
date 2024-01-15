@@ -24,4 +24,10 @@ const Schedule = mongoose.model("Schedule", new Schema({
         type: Date,
         required: true,
     },
+    "tour_id" : {
+        type : Schema.Types.ObjectId,
+        require : true,
+        ref : "Tour"
+    }
 }))
+export default Schedule;
