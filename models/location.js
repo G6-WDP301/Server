@@ -1,6 +1,6 @@
 import mongoose, {ObjectId, Schema} from 'mongoose';
 
-const Location = mongoose.Schema("Location",new Schema({
+const Location = mongoose.model("Location",new Schema({
     "id" : {
         type : Schema.Types.ObjectId,
         require :  true
