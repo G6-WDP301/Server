@@ -51,5 +51,11 @@ const User = mongoose.model("User", new Schema({
     "avatar": {
         type: String,
         required: true
+    },
+    "role_id" : {
+        type : Schema.Types.ObjectId,
+        ref : "Role",
+        require : true
     }
 }))
+export default User;

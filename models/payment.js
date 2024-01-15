@@ -1,4 +1,5 @@
 import mongoose, { ObjectId, Schema } from 'mongoose'
+import Tour from './tour'
 
 const Payment = mongoose.model("Payment", new Schema({
     "id": {
@@ -23,5 +24,16 @@ const Payment = mongoose.model("Payment", new Schema({
     "additional_details": {
         type: String,
         required: true
+    },
+    "user_id": {
+        type : Schema.Types.ObjectId,
+        require : true,
+        ref : "User"
+    },
+    "tour_id" : {
+        type : Schema.Types.ObjectId,
+        require : true,
+        ref : "Tour"
     }
 }))
+export default Tour;

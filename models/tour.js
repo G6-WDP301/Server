@@ -1,8 +1,9 @@
-import mongoose, { ObjectId, Schema } from 'mongoose'
+import mongoose, { ObjectId, Schema, Types } from 'mongoose'
 
 const Tour = mongoose.model("Tour", new Schema({
     "id": {
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        require : true
     },
     "tour_name": {
         type: String,
@@ -16,10 +17,12 @@ const Tour = mongoose.model("Tour", new Schema({
         type: String,
         required: true,
     },
-    "tour_img": {
-        type: String,
-        required: true,
-    },
+    "tour_img": [
+        {
+            type : String,
+            required : true,
+        }
+    ],
     "max_tourist": {
         type: Number,
         required: true,
@@ -39,5 +42,16 @@ const Tour = mongoose.model("Tour", new Schema({
     "end_date": {
         type: Date,
         required: true,
+    },
+    "start_position" : {
+        type : Schema.Types.ObjectId,
+        require : true,
+        ref : "Location"
+    },
+    "end_position" : {
+        type : Schema.Types.ObjectId,
+        require : true,
+        ref : "Location"
     }
 }))
+export default Tour;
