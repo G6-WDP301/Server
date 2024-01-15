@@ -29,11 +29,9 @@ const Tour = mongoose.model("Tour", new Schema({
     },
     "tour_category": {
         type: String,
-        required: true,
     },
     "status": {
         type: String,
-        required: true,
     },
     "start_date": {
         type: Date,
@@ -45,13 +43,14 @@ const Tour = mongoose.model("Tour", new Schema({
     },
     "start_position" : {
         type : Schema.Types.ObjectId,
+        ref : "Location",
         require : true,
-        ref : "Location"
     },
     "end_position" : {
         type : Schema.Types.ObjectId,
+        ref : "Location",
         require : true,
-        ref : "Location"
-    }
+    },
+    
 }))
 export default Tour;

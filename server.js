@@ -3,15 +3,13 @@ import * as dotenv from 'dotenv';
 import connectDB from './database/database.js';
 // import routes from './routes/index.js';
 import cors from 'cors';
-import bodyParser from "body-parser";
-import {tourController,locationController} from "./routes/index.js" 
+import {tourRouter,locationRouter} from "./routes/index.js" 
 dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(bodyParser.json());
-app.use('/api/tour',tourController.createTour)
-app.use('/api/location',locationController.createLocation)
+app.use('/api/tour',tourRouter)
+app.use('/api/location',locationRouter)
 
 
 // app.use('/products', routes.productRouter);

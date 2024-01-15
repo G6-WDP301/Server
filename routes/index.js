@@ -1,6 +1,7 @@
-import { tourController,locationController } from "../controllers/index.js"
+import tourRouter from "./tour.js";
+import locationRouter from "./location.js";
 
 export {
-    tourController,
-    locationController
+    tourRouter,
+    locationRouter
 }
