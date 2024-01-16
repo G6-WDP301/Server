@@ -27,13 +27,16 @@ const Tour = mongoose.model("Tour", new Schema({
         type: Number,
         required: true,
     },
-    
     "status": {
         type: String,
     },
     "start_date": {
         type: Date,
         required: true,
+    },
+    "duration" : {
+        type : Number,
+        require : true
     },
     "start_position" : {
         type : Schema.Types.ObjectId,

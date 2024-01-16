@@ -10,7 +10,7 @@ const locationRepository = {
                 locationSaved
             }
         } catch (error) {
-            throw new Exception("Have somthing wrong with data");
+            throw new Error(error);
         }
     }
 }
