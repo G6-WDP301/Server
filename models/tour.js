@@ -27,9 +27,6 @@ const Tour = mongoose.model("Tour", new Schema({
         type: Number,
         required: true,
     },
-    "tour_category": {
-        type: String,
-    },
     "status": {
         type: String,
     },
@@ -37,9 +34,9 @@ const Tour = mongoose.model("Tour", new Schema({
         type: Date,
         required: true,
     },
-    "end_date": {
-        type: Date,
-        required: true,
+    "duration" : {
+        type : Number,
+        require : true
     },
     "start_position" : {
         type : Schema.Types.ObjectId,
