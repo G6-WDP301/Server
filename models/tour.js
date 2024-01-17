@@ -14,7 +14,7 @@ const Tour = mongoose.model("Tour", new Schema({
         required: true,
     },
     "tour_price": {
-        type: String,
+        type: Number,
         required: true,
     },
     "tour_img": [
