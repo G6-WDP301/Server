@@ -1,10 +1,6 @@
 import mongoose, { ObjectId, Schema, Types } from 'mongoose'
 
 const Tour = mongoose.model("Tour", new Schema({
-    "id": {
-        type: Schema.Types.ObjectId,
-        require : true
-    },
     "tour_name": {
         type: String,
         required: true,
@@ -13,9 +9,19 @@ const Tour = mongoose.model("Tour", new Schema({
         type: String,
         required: true,
     },
+    "tour_transportion" : [
+        {
+            type : Schema.Types.ObjectId,
+            ref : "Transportion"
+        }
+    ],
     "tour_price": {
-        type: String,
+        type: Number,
         required: true,
+    },
+    "discount" : {
+        type : Number,
+        default : 0
     },
     "tour_img": [
         {
@@ -28,7 +34,8 @@ const Tour = mongoose.model("Tour", new Schema({
         required: true,
     },
     "status": {
-        type: String,
+        type: Boolean,
+        default : false,
     },
     "start_date": {
         type: Date,
