@@ -18,6 +18,14 @@ const transportionRepository = {
         } catch (error) {
             throw new Error(error);
         }
+    },
+    deleteTransportion : async (id) => {
+        try {
+            const transportionDeleted = await Transportion.deleteOne({_id : id});
+            return transportionDeleted;
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 }
 export default transportionRepository;

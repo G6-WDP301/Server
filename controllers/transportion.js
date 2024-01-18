@@ -35,6 +35,28 @@ const transportionController = {
                 error : error.message
             })
         }
+    },
+    deleteTransportion : async (req,res) => {
+        try {
+            const {id} = req.params;
+            const transportionDeleted = await transportionRepository.deleteTransportion(id);
+            if(transportionDeleted.deletedCount == 1){
+                return res.status(200).json({
+                    success : true,
+                    message : "Deleted successfully !"
+                })
+            }else{
+                return res.status(200).json({
+                    success : false,
+                    error : "ID not exist !"
+                })
+            }
+        } catch (error) {
+            return res.status(400).json({
+                success : false,
+                error : error.message
+            })
+        }
     }
 }
 
