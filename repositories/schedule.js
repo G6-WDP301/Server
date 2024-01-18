@@ -16,6 +16,14 @@ const scheduleRepository = {
         } catch (error) {
             throw new Error(error);
         }
+    },
+    findSchedulesOfTour : async (tour_id) => {
+        try {
+            const schedules = await Schedule.find({tour_id});
+            return schedules;
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 }
 
