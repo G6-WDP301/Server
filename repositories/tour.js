@@ -37,6 +37,28 @@ const tourRepository = {
         } catch (error) {
             throw new Error(error);
         }
+    },
+    findATour : async (tour_id) => {
+        try {
+            const tour = await Tour.findById(tour_id).populate(["start_position","end_position","tour_transportion"]);
+            const scheduleOfTour = await Schedule.find({tour_id});
+            return {
+                tour,
+                scheduleOfTour
+            };
+        } catch (error) {
+            throw new Error(error);
+        }
+    },
+    changeStatusTour : async (status,tour_id) => {
+        try {
+            const tourUpdated = await Tour.updateOne({_id : tour_id},{
+                status : status
+            })
+            return tourUpdated;
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 }
 export default tourRepository

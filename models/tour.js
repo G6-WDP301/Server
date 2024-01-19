@@ -12,7 +12,8 @@ const Tour = mongoose.model("Tour", new Schema({
     "tour_transportion" : [
         {
             type : Schema.Types.ObjectId,
-            ref : "Transportion"
+            ref : "Transportion",
+            require : true
         }
     ],
     "tour_price": {
