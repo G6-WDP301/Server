@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import Schedule from "../models/schedule.js"
 const scheduleRepository = {
     createScheduleOfTour : async (scheduleInfor) => {
@@ -20,6 +21,14 @@ const scheduleRepository = {
                 schedule_date : 1
             });
             return schedules;
+        } catch (error) {
+            throw new Error(error);
+        }
+    },
+    deleteSchedule : async (schedule_id) => {
+        try {
+            const scheduleDeleted = await Schedule.deleteOne({_id : schedule_id});
+            return scheduleDeleted;
         } catch (error) {
             throw new Error(error);
         }

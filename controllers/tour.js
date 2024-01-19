@@ -1,4 +1,5 @@
 import tourRepository from "../repositories/tour.js";
+import Validator from "../validator/validator.js";
 
 const tourController = {
     createTour : async (req,resp) => {
@@ -22,9 +23,7 @@ const tourController = {
                     error : "max_tourist must be greater than 0 !"
                 })
             }
-            const dateToCompare = new Date();
-            const tour_date = new Date(start_date);
-            if(tour_date < dateToCompare.getTime()){
+            if(!Validator.checkInputDateWithNow(start_date)){
                 return resp.status(400).json({
                     success : false,
                     error : "Start Date must be greater than now !"
