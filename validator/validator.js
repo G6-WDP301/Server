@@ -6,6 +6,10 @@ const Validator = {
             return false;
         }
         return true;
+    },
+    checkString : (dataInput) => {
+        const pattern = /^[a-zA-Z\s]+$/;
+        return pattern.test(dataInput);
     }
 }
 export default Validator;
