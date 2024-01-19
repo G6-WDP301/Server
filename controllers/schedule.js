@@ -1,4 +1,5 @@
 import Schedule from "../models/schedule.js";
+import Tour from "../models/tour.js";
 import { scheduleRepository } from "../repositories/index.js";
 import Validator from "../validator/validator.js";
 
@@ -19,6 +20,13 @@ const scheduleController = {
                 });
             }
             const schedule_tour = await Schedule.find({tour_id});
+            const tour = await Tour.findById({_id : tour_id});
+            if(schedule_tour.length >= tour.duration){
+                return resp.status(400).json({
+                    success : false,
+                    error : "Can not add schedule more !"
+                });
+            }
             if(schedule_tour.length >= 1){
                 const last_schedule = await Schedule.findOne({tour_id}).sort({schedule_date : -1});
                 const date_check = new Date(schedule_date);
