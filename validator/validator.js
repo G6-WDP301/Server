@@ -10,6 +10,18 @@ const Validator = {
     checkString : (dataInput) => {
         const pattern = /^[a-zA-Z\s]+$/;
         return pattern.test(dataInput);
+    },
+    checkEmail : (dataInput) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(dataInput)) {
+            return false; // Invalid email format
+          }
+        const domain = dataInput.split('@')[1];
+        return domain.toLowerCase() === 'gmail.com';
+    },
+    isValidPhoneNumber : (dataInput) => {
+        const pattern = /^\d{10}$/;
+        return pattern.test(dataInput);
     }
 }
 export default Validator;
