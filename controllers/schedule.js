@@ -3,8 +3,18 @@ import { scheduleRepository } from "../repositories/index.js";
 const scheduleController = {
     createScheduleOfTour : async (req,resp) => {
         try {
+            const {tour_id,schedule_name,schedule_detail,schedule_date} = req.body;
+            if(!tour_id || !schedule_name || !schedule_detail || !schedule_date){
+                return resp.statsu(400).json({
+                    success : false,
+                    error : "Can not set field empty !"
+                });
+            }
             const scheduleSaved = await scheduleRepository.createScheduleOfTour(req.body);
-            return resp.status(200).json(scheduleSaved);
+            return resp.status(200).json({
+                success : true,
+                scheduleSaved
+            });
         } catch (error) {
             return resp.status(500).json(error.toString());
         }

@@ -9,10 +9,7 @@ const scheduleRepository = {
                 schedule_date,
                 tour_id
             })
-            return {
-                status : "OK",
-                scheduleSaved
-            };
+            return scheduleSaved;
         } catch (error) {
             throw new Error(error);
         }
