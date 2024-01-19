@@ -16,7 +16,9 @@ const scheduleRepository = {
     },
     findSchedulesOfTour : async (tour_id) => {
         try {
-            const schedules = await Schedule.find({tour_id});
+            const schedules = await Schedule.find({tour_id}).sort({
+                schedule_date : 1
+            });
             return schedules;
         } catch (error) {
             throw new Error(error);

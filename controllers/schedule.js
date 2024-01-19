@@ -1,3 +1,4 @@
+import Schedule from "../models/schedule.js";
 import { scheduleRepository } from "../repositories/index.js";
 
 const scheduleController = {
@@ -10,11 +11,29 @@ const scheduleController = {
                     error : "Can not set field empty !"
                 });
             }
+            const dateNow = new Date();
+            const date_check = new Date(schedule_date);
+            if(date_check < dateNow){
+                return resp.status(400).json({
+                    success : false,
+                    error : "Schedule Date must be greater than now"
+                });
+            }
+            const schedule_tour = await Schedule.find({tour_id});
+            if(schedule_tour){
+                const last_schedule = await Schedule.findOne({tour_id}).sort({schedule_date : -1});
+                if(last_schedule.schedule_date > date_check){
+                    return resp.status(400).json({
+                        success : false,
+                        error : "Schedule Date must be greater than old Schedule !"
+                    });
+                }
+            }
             const scheduleSaved = await scheduleRepository.createScheduleOfTour(req.body);
-            return resp.status(200).json({
-                success : true,
-                scheduleSaved
-            });
+                return resp.status(200).json({
+                    success : true,
+                    scheduleSaved
+                });
         } catch (error) {
             return resp.status(500).json(error.toString());
         }

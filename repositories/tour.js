@@ -59,6 +59,14 @@ const tourRepository = {
         } catch (error) {
             throw new Error(error);
         }
+    },
+    updateTour : async (tourInfor,tour_id) => {
+        try {
+            const tourUpdated = await Tour.updateOne({_id : tour_id},tourInfor);
+            return tourUpdated;
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 }
 export default tourRepository

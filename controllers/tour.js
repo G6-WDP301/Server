@@ -119,6 +119,54 @@ const tourController = {
                 error : error.message
             });
         }
+    },
+    updateTour : async (req,resp) => {
+        const { id } = req.params;
+        try {
+            const {tour_name,tour_description,tour_price,tour_img,max_tourist,start_date,start_position,end_position,duration,tour_transportion} = req.body;
+            if(!tour_name || !tour_description  || !tour_img || !max_tourist || !start_date || !start_position || !end_position || !duration || !tour_transportion){
+                return resp.status(400).json({
+                    success : false,
+                    error : "Can not set field empty !"
+                });
+            }
+            if(tour_price < 0){
+                return resp.status(400).json({
+                    success : false,
+                    error : "Can not set Price less than 0 !"
+                })
+            }
+            if(max_tourist <= 0){
+                return resp.status(400).json({
+                    success : false,
+                    error : "max_tourist must be greater than 0 !"
+                })
+            }
+            const dateToCompare = new Date();
+            const tour_date = new Date(start_date);
+            if(tour_date < dateToCompare.getTime()){
+                return resp.status(400).json({
+                    success : false,
+                    error : "Start Date must be greater than now !"
+                })
+            }
+            const tourUpdated = await tourRepository.updateTour(req.body,id);
+            if(tourUpdated.matchedCount === 0){
+                return resp.status(400).json({
+                    success : false,
+                    error : "ID not exist !"
+                })
+            }
+            return resp.status(200).json({
+                success : true,
+                message : "Updated successfully !"
+            })
+        } catch (error) {
+            return resp.status(400).json({
+                success : false,
+                error : error.message
+            });
+        }
     }
 }
 
