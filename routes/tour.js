@@ -8,6 +8,7 @@ tourRouter.delete("/delete",tourController.deleteTour)
 tourRouter.get("/find-all",tourController.findAll)
 tourRouter.get("/:id",tourController.findATour)
 tourRouter.put("/change_status",tourController.changeStatusTour)
+tourRouter.put("/update/:id",tourController.updateTour)
 
 
 export default tourRouter

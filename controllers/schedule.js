@@ -1,22 +1,45 @@
+import Schedule from "../models/schedule.js";
 import { scheduleRepository } from "../repositories/index.js";
+import Validator from "../validator/validator.js";
 
 const scheduleController = {
     createScheduleOfTour : async (req,resp) => {
         try {
             const {tour_id,schedule_name,schedule_detail,schedule_date} = req.body;
             if(!tour_id || !schedule_name || !schedule_detail || !schedule_date){
-                return resp.statsu(400).json({
+                return resp.status(400).json({
                     success : false,
                     error : "Can not set field empty !"
                 });
             }
+            if(!Validator.checkInputDateWithNow(schedule_date)){
+                return resp.status(400).json({
+                    success : false,
+                    error : "Schedule Date must be greater than now"
+                });
+            }
+            const schedule_tour = await Schedule.find({tour_id});
+            if(schedule_tour.length >= 1){
+                const last_schedule = await Schedule.findOne({tour_id}).sort({schedule_date : -1});
+                const date_check = new Date(schedule_date);
+                if(last_schedule.schedule_date > date_check){
+                    return resp.status(400).json({
+                        success : false,
+                        error : "Schedule Date must be greater than old Schedule !"
+                    });
+                }
+            }
+            
             const scheduleSaved = await scheduleRepository.createScheduleOfTour(req.body);
-            return resp.status(200).json({
-                success : true,
-                scheduleSaved
-            });
+                return resp.status(200).json({
+                    success : true,
+                    scheduleSaved
+                });
         } catch (error) {
-            return resp.status(500).json(error.toString());
+            return resp.status(400).json({
+                success : false,
+                error : error.message
+            });
         }
     },
     findSchedulesOfTour : async (req,res) => {
@@ -35,6 +58,27 @@ const scheduleController = {
             });
         } catch (error) {
             return res.status(400).json({
+                success : false,
+                error : error.message
+            });
+        }
+    },
+    deleteSchedule : async (req,resp) => {
+        try {
+            const { id } = req.params;
+            const scheduleDeleted = await scheduleRepository.deleteSchedule(id);
+            if(scheduleDeleted.deletedCount === 0){
+                return resp.status(400).json({
+                    success : false,
+                    error : "ID not exist !"
+                })
+            }
+            return resp.status(200).json({
+                success : true,
+                message : "Deleted successfully"
+            })
+        } catch (error) {
+            return resp.status(400).json({
                 success : false,
                 error : error.message
             });
