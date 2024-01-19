@@ -1,9 +1,6 @@
 import mongoose, { ObjectId, Schema } from "mongoose"
 
 const User = mongoose.model("User", new Schema({
-    "id": {
-        type: Schema.Types.ObjectId
-    },
     "username": {
         type: String,
         required: true,
