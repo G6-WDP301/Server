@@ -2,9 +2,11 @@ import tourRouter from "./tour.js";
 import locationRouter from "./location.js";
 import scheduleRouter from "./schedule.js";
 import transportionRouter from "./transportion.js";
+import userRouter from "./user.js";
 export {
     tourRouter,
     locationRouter,
     scheduleRouter,
-    transportionRouter
+    transportionRouter,
+    userRouter
 }

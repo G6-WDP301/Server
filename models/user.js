@@ -8,10 +8,6 @@ const User = mongoose.model("User", new Schema({
     "email": {
         type: String,
         required: true,
-        validate: {
-            validator: (value) => isEmail(value),
-            message: "Incorrect format ~~~",
-        },
     },
     "password": {
         type: String,
@@ -21,24 +17,16 @@ const User = mongoose.model("User", new Schema({
             message: "Length password must be greater than 8 ~~~",
         },
     },
-    "password": {
-        type: String,
-        required: true,
-        validate: {
-            validator: (value) => value.length > 8,
-            message: 'Length of password > 8'
-        }
-    },
     "dob": {
         type: Date,
         required: true
     },
     "gender": {
         type: Boolean,
-        required: true
+        required: true,
     },
     "phoneNumber": {
-        type: Number,
+        type: String,
         required: true
     },
     "address": {
