@@ -8,5 +8,5 @@ export {
     tourRepository,
     scheduleRepository,
     transportionRepository,
-    userRepository
+    userRepository,
 }
