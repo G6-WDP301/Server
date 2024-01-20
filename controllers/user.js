@@ -92,7 +92,42 @@ const userController = {
                 error : error.message
             });
         }
-    }
+    },
+    updateAccount : async (req,resp) => {
+        try {
+            const {id} = req.params;
+            const {username,phoneNumber} = req.body;
+            if(!Validator.checkString(username)){
+                return resp.status(400).json({
+                    success : false,
+                    error : "username " + MessageError.inputNotContainSpecial 
+                })
+            }
+            if(!Validator.isValidPhoneNumber(phoneNumber)){
+                return resp.status(400).json({
+                    success : false,
+                    error : MessageError.phoneNumber
+                });
+            }
+            const userUpdated = await userRepository.updateAccount(req.body,id);
+            console.log(userUpdated);
+            if(userUpdated.matchedCount === 0){
+                return resp.status(400).json({
+                    success : false,
+                    error : MessageError.idNotExist
+                })
+            }
+            return resp.status(200).json({
+                success : true,
+                message : "Update successfully !"
+            })
+        } catch (error) {
+            return resp.status(400).json({
+                success : false,
+                error : error.message
+            })
+        }
+    } 
 }
 
 export default userController;

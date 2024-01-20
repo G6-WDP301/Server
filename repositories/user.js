@@ -32,6 +32,14 @@ const userRepository = {
         } catch (error) {
             throw new Error(error);
         }
+    },
+    updateAccount : async (userInfor,user_id) => {
+        try {
+            const userUpdated = await User.updateOne({_id : user_id},userInfor);
+            return userUpdated;
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 }
 
