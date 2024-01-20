@@ -3,6 +3,8 @@ import MessageError from "../constants/messageError.js";
 import User from "../models/user.js";
 import userRepository from "../repositories/user.js";
 import Validator from "../validator/validator.js"
+import Mail from "../mail/mail.js"
+import {APPNAME} from "../constants/constants.js"
 const userController = {
     createAccount : async (req,resp) => {
         try {
@@ -33,6 +35,14 @@ const userController = {
                 });
             }
             const userSaved = await userRepository.createAccount(req.body);
+            const mailContent = {
+                receiver : email,
+                subject : "Thông tin tạo tài khoản",
+                content : `Tài khoản với email ${email} của quý khách đã được tạo.
+                Chào mừng quý khách đến với ${APPNAME}.`
+            }
+            //Send email
+            Mail.sendMail(mailContent.receiver,mailContent.subject,mailContent.content);
             return resp.status(200).json({
                 success : true,
                 message : "Create account successfully !"
