@@ -34,7 +34,9 @@ const userController = {
                     error : "Email already exist !"
                 });
             }
-            const userSaved = await userRepository.createAccount(req.body);
+            //Save to DB
+            await userRepository.createAccount(req.body);
+
             const mailContent = {
                 receiver : email,
                 subject : "Thông tin tạo tài khoản",
