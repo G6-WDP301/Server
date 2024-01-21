@@ -144,7 +144,7 @@ const userController = {
             if(user.matchedCount === 0){
                 return resp.status(StatusCode.ID_NOTFOUND).json({
                     success : false,
-                    error : MessageError.idNotExist
+                    error : MessageError.EmailNotExist
                 })
             }
             const mailContent = {
@@ -159,9 +159,46 @@ const userController = {
                 message : "Check mail to get new password !"
             });
         } catch (error) {
-            
+            return resp.status(StatusCode.BAD_REQUEST).json({
+                success : false,
+                error : error.message
+            })
         }
-    } 
+    },
+    changePassword : async (req,resp) => {
+        try {
+            const {id} = req.params;
+            const {newPass} = req.body;
+            if(!Validator.checkLengthsString(newPass,7)){
+                return resp.status(StatusCode.BAD_REQUEST).json({
+                    success : false,
+                    error : "Password lengths must be greater than 7 !"
+                });
+            }
+            const userUpdated = await userRepository.changePassword(id,newPass);
+            if(userUpdated.matchedCount === 0){
+                return resp.status(StatusCode.BAD_REQUEST).json({
+                    success : false,
+                    error : MessageError.idNotExist
+                });
+            }
+            if(userUpdated.modifiedCount === 0){
+                return resp.status(StatusCode.BAD_REQUEST).json({
+                    success : false,
+                    error : "New password must be different with current password !"
+                });
+            }
+            return resp.status(StatusCode.SUCCESS).json({
+                success : true,
+                message : "Update successfully !"
+            });
+        } catch (error) {
+            return resp.status(StatusCode.BAD_REQUEST).json({
+                success : false,
+                error : error.message
+            });
+        }
+    }
 }
 
 export default userController;

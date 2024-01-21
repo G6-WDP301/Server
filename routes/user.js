@@ -7,6 +7,7 @@ userRouter.post("/create",userController.createAccount);
 userRouter.post("/login",userController.loginAccount);
 userRouter.put("/update/:id",userController.updateAccount);
 userRouter.post("/forgot_password",userController.forgotPassword);
+userRouter.post("/change_password/:id",userController.changePassword);
 
 
 

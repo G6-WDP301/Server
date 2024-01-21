@@ -1,7 +1,6 @@
 import { ROLE_USER } from "../constants/constants.js";
 import User from "../models/user.js";
 import Role from "../models/role.js"
-import { getRandomInt } from "../constants/common.js";
 const userRepository = {
     createAccount: async (userInfor) => {
         try {
@@ -48,6 +47,16 @@ const userRepository = {
                 password : newPass
             })
             return user;
+        } catch (error) {
+            throw new Error(error);
+        }
+    },
+    changePassword : async (userID,newPass) => {
+        try {
+            const userUpdated = await User.updateOne({_id : userID},{
+                password : newPass
+            });
+            return userUpdated;
         } catch (error) {
             throw new Error(error);
         }

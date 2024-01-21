@@ -4,5 +4,6 @@ const MessageError = {
     inputNotContainSpecial : " can not contain special character !",
     idExist : "ID already exist !",
     idNotExist : "ID not exist !",
+    EmailNotExist : "Email is not exist !"
 }
 export default MessageError;
