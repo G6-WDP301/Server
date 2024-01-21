@@ -1,16 +1,13 @@
 import mongoose, {ObjectId, Schema} from 'mongoose'
 
 const Booking = mongoose.model("Booking", new Schema({
-    "id": {
-        type: Schema.Types.ObjectId,
-        require : true
-    },
     "booking_status": {
-        type: String,
-        required: true,
+        type: Boolean,
+        default : false,
     },
     "booking_date": {
         type: Date,
+        default : new Date(),
         required: true,
     },
     "tour_id" : {
