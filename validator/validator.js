@@ -8,7 +8,7 @@ const Validator = {
         return true;
     },
     checkString : (dataInput) => {
-        const pattern = /^[a-zA-Z\s]+$/;
+        const pattern = /^[a-zA-ZÀ-Ỹà-ỹ\s]+$/;
         return pattern.test(dataInput);
     },
     checkEmail : (dataInput) => {
