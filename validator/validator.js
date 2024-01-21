@@ -22,6 +22,9 @@ const Validator = {
     isValidPhoneNumber : (dataInput) => {
         const pattern = /^\d{10}$/;
         return pattern.test(dataInput);
+    },
+    checkLengthsString : (dataInput,lengths) => {
+        return dataInput.length > lengths;
     }
 }
 export default Validator;

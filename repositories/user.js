@@ -40,6 +40,26 @@ const userRepository = {
         } catch (error) {
             throw new Error(error);
         }
+    },
+    forgotPassword : async (email,newPass) => {
+        try {
+            const user = await User.updateOne({email},{
+                password : newPass
+            })
+            return user;
+        } catch (error) {
+            throw new Error(error);
+        }
+    },
+    changePassword : async (userID,newPass) => {
+        try {
+            const userUpdated = await User.updateOne({_id : userID},{
+                password : newPass
+            });
+            return userUpdated;
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 }
 
