@@ -50,6 +50,28 @@ const BookingController = {
                 error : error.message
             })
         }
+    },
+    cancelBookingTour : async (req,resp) => {
+        try {
+            const {id} = req.params;
+            const {user_id} = req.body;
+            const tourDeleted = await BookingRepository.cancelBookingTour(id,user_id);
+            if(tourDeleted.deletedCount === 0 ){
+                return resp.status(StatusCode.BAD_REQUEST).json({
+                    success : false,
+                    error : "Not Found !"
+                })
+            }
+            return resp.status(StatusCode.SUCCESS).json({
+                success : true,
+                message : "Cancel tour success"
+            })
+        } catch (error) {
+            return resp.status(StatusCode.BAD_REQUEST).json({
+                success : false,
+                error : error
+            })
+        }
     }
 }
 
