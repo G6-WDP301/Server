@@ -22,7 +22,7 @@ const User = mongoose.model("User", new Schema({
         required: true
     },
     "gender": {
-        type: Boolean,
+        type: String,
         required: true,
     },
     "phoneNumber": {
@@ -35,7 +35,6 @@ const User = mongoose.model("User", new Schema({
     },
     "avatar": {
         type: String,
-        required: true
     },
     "role_id" : {
         type : Schema.Types.ObjectId,
