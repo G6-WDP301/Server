@@ -1,7 +1,7 @@
 const Validator = {
-    checkInputDateWithNow : (dateInput) => {
+    CheckDate : (dateInput,secondDate) => {
         const date = new Date(dateInput);
-        const dateNow = new Date();
+        const dateNow = new Date(secondDate);
         if(date < dateNow){
             return false;
         }
@@ -17,7 +17,7 @@ const Validator = {
             return false; // Invalid email format
           }
         const domain = dataInput.split('@')[1];
-        return domain.toLowerCase() === 'gmail.com';
+        return domain.toLowerCase() === 'gmail.com' || domain.toLowerCase() === 'fpt.edu.vn' || domain.toLowerCase() === 'gmail.com.vn';
     },
     isValidPhoneNumber : (dataInput) => {
         const pattern = /^\d{10}$/;

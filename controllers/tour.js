@@ -4,7 +4,7 @@ import Validator from "../validator/validator.js";
 const tourController = {
     createTour : async (req,resp) => {
         try {
-            const {tour_name,tour_description,tour_price,tour_img,max_tourist,start_date,start_position,end_position,duration,tour_transportion} = req.body;
+            const {tour_name,tour_description,tour_price,tour_img,max_tourist,start_date,end_date,start_position,end_position,duration,tour_transportion} = req.body;
             if(!tour_name || !tour_description  || !tour_img || !max_tourist || !start_date || !start_position || !end_position || !duration || !tour_transportion){
                 return resp.status(400).json({
                     success : false,
@@ -29,11 +29,17 @@ const tourController = {
                     error : "max_tourist must be greater than 0 !"
                 })
             }
-            if(!Validator.checkInputDateWithNow(start_date)){
+            if(!Validator.CheckDate(start_date,new Date())){
                 return resp.status(400).json({
                     success : false,
                     error : "Start Date must be greater than now !"
                 })
+            }
+            if(!Validator.CheckDate(end_date,start_date)){
+                return resp.status(400).json({
+                    success : false,
+                    error : "Start Date must be greater than now !"
+                }) 
             }
            const tourSaved = await tourRepository.createTour(req.body);
             return resp.status(200).json({
