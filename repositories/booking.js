@@ -10,6 +10,17 @@ const BookingRepository = {
             } catch (error) {
                 throw new Error(error);
             }
+        },
+        cancelBookingTour : async (tour_id, user_id) => {
+            try {
+                const tourDeleted = await Booking.deleteOne({
+                    tour_id,
+                    user_id
+                });
+                return tourDeleted;
+            } catch (error) {
+                throw new Error(error);
+            }
         }
 }
 
