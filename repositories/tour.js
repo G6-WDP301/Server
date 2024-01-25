@@ -70,6 +70,64 @@ const tourRepository = {
         } catch (error) {
             throw new Error(error);
         }
+    },
+    findTourWithStartAndEnd : async (start_position,end_position,page,size,start_date) => {
+        try {
+            let tours = [];
+            let totalPage = 0;
+            let totalDocs = 0;
+            let pageCurrent = parseInt(page);
+            let pageSize = parseInt(size);
+            if(start_position !== "" && end_position !== ""){
+                 tours = await Tour.find({
+                    start_position,
+                    end_position,
+                    start_date : {
+                        $gte : start_date ? start_date : new Date()
+                    }
+                }).populate(["start_position","end_position"]).limit(pageSize).skip(pageSize * (pageCurrent - 1));
+                totalDocs = await Tour.countDocuments({
+                    start_position,
+                    end_position,
+                    start_date : {
+                        $gte : start_date ? start_date : new Date()
+                    }
+                })
+            }else if (start_position !== "" && end_position === ""){
+                 tours = await Tour.find({
+                    start_position,
+                    start_date : {
+                        $gte : start_date ? start_date : new Date()
+                    }
+                }).populate(["start_position","end_position"]).limit(pageSize).skip(pageSize * (pageCurrent - 1));
+                totalDocs = await Tour.countDocuments({
+                    start_position,
+                    start_date : {
+                        $gte : start_date ? start_date : new Date()
+                    }
+                })
+            }else {
+                 tours = await Tour.find({
+                    end_position,
+                    start_date : {
+                        $gte : start_date ? start_date : new Date()
+                    }
+                }).populate(["start_position","end_position"]).limit(pageSize).skip(pageSize * (pageCurrent - 1));
+                totalDocs = await Tour.countDocuments({
+                    end_position,
+                    start_date : {
+                        $gte : start_date ? start_date : new Date()
+                    }
+                })
+            }
+            totalPage = Math.ceil(totalDocs / pageSize);
+            return {
+                tours,
+                totalPage
+            };
+        } catch (error) {
+            throw new Error(error)
+        }
     }
 }
 export default tourRepository
