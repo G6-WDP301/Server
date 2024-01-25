@@ -13,7 +13,7 @@ const scheduleController = {
                     error : "Can not set field empty !"
                 });
             }
-            if(!Validator.checkInputDateWithNow(schedule_date)){
+            if(!Validator.CheckDate(schedule_date,new Date())){
                 return resp.status(400).json({
                     success : false,
                     error : "Schedule Date must be greater than now"
@@ -28,7 +28,7 @@ const scheduleController = {
                 });
             }
             if(schedule_tour.length >= 1){
-                const last_schedule = await Schedule.findOne({tour_id}).sort({schedule_date : -1});
+                const last_schedule = schedule_tour.pop();
                 const date_check = new Date(schedule_date);
                 if(last_schedule.schedule_date > date_check){
                     return resp.status(400).json({

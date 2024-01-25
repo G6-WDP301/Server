@@ -1,10 +1,10 @@
 import tourRepository from "../repositories/tour.js";
 import Validator from "../validator/validator.js";
-
+import StatusCode from "../constants/statusCode.js"
 const tourController = {
     createTour : async (req,resp) => {
         try {
-            const {tour_name,tour_description,tour_price,tour_img,max_tourist,start_date,end_date,start_position,end_position,duration,tour_transportion} = req.body;
+            const {tour_name,tour_description,tour_price,tour_img,max_tourist,start_date,end_date,start_position,end_position,duration,tour_transportion,return_tax,return_status} = req.body;
             if(!tour_name || !tour_description  || !tour_img || !max_tourist || !start_date || !start_position || !end_position || !duration || !tour_transportion){
                 return resp.status(400).json({
                     success : false,
@@ -38,8 +38,14 @@ const tourController = {
             if(!Validator.CheckDate(end_date,start_date)){
                 return resp.status(400).json({
                     success : false,
-                    error : "Start Date must be greater than now !"
+                    error : "End Date must be greater than now and start date !"
                 }) 
+            }
+            if(!Validator.checkNumberInMinMax(return_tax,0,100)){
+                return resp.status(StatusCode.BAD_REQUEST).json({
+                    success : false,
+                    error : "Return tax only in 0 to 100 !"
+                })
             }
            const tourSaved = await tourRepository.createTour(req.body);
             return resp.status(200).json({
