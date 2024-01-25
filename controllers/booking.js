@@ -7,6 +7,7 @@ import Mail from "../mail/mail.js";
 import { FormatDate, FormatNumberToVND } from "../constants/common.js";
 import Payment from "../models/payment.js";
 import { APPNAME } from "../constants/constants.js";
+import Validator from "../validator/validator.js"
 const BookingController = {
     bookTour : async (req,resp) => {
         try {
@@ -23,6 +24,12 @@ const BookingController = {
                 return resp.status(StatusCode.BAD_REQUEST).json({
                     success : false,
                     error : "Tour is not exist !"
+                });
+            }
+            if(!Validator.CheckDate(checkTour.start_date,new Date())){
+                return resp.status(StatusCode.BAD_REQUEST).json({
+                    success : false,
+                    error : "Tour already start can not book any more !"
                 });
             }
             if(checkUser){
@@ -234,7 +241,7 @@ const BookingController = {
                 })
             }
             // Handle when user was pay the tour
-            const tourInfor = await Tour.findById({_id : id});
+            const tourInfor = await Tour.findById({_id : id}).populate(["start_position","end_position"]);
             // Delete payment history in payment table and delete booking tour in booking table
            if(tourInfor.return_status){
                 await BookingRepository.cancelBookingTour(id,user_id);
@@ -348,7 +355,7 @@ const BookingController = {
                                                 </tr>
                                                 <tr>
                                                     <td class="m_7894734060713233746td-left">
-                                                        Tiền được hoàn lại là :
+                                                        Thuế trả vé :
                                                     </td>
                                                     <td class="m_7894734060713233746td-right">
                                                         <span style="font-weight:bold;color:#c50000">
