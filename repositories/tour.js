@@ -3,7 +3,7 @@ import Tour from "../models/tour.js"
 const tourRepository = {
     createTour : async (tourInfor) => {
         try {
-            const {tour_name,tour_description,tour_price,tour_img,max_tourist,start_date,start_position,end_position,duration,tour_transportion} = tourInfor;
+            const {tour_name,tour_description,tour_price,tour_img,max_tourist,start_date,end_date,start_position,end_position,duration,tour_transportion,return_status,return_tax} = tourInfor;
             const tourSaved = await Tour.create({
                 tour_name ,
                 tour_description ,
@@ -11,10 +11,13 @@ const tourRepository = {
                 tour_img ,
                 max_tourist ,
                 start_date ,
+                end_date,
                 duration,
                 start_position,
                 end_position,
                 tour_transportion,
+                return_status,
+                return_tax
             });
             return tourSaved;
         } catch (error) {

@@ -25,6 +25,9 @@ const Validator = {
     },
     checkLengthsString : (dataInput,lengths) => {
         return dataInput.length > lengths;
+    },
+    checkNumberInMinMax : (number,min,max) => {
+        return number >= min && number <= max;
     }
 }
 export default Validator;
