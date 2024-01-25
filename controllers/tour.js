@@ -1,6 +1,7 @@
 import tourRepository from "../repositories/tour.js";
 import Validator from "../validator/validator.js";
 import StatusCode from "../constants/statusCode.js"
+import MessageError from "../constants/messageError.js"
 const tourController = {
     createTour : async (req,resp) => {
         try {
@@ -184,6 +185,29 @@ const tourController = {
                 error : error.message
             });
         }
+    },
+    findTourWithStartAndEnd : async (req,resp) => {
+       try {
+        const {page,pageSize} = req.query;
+        const {start_position,end_position,start_date} = req.body;
+        const tours = await tourRepository.findTourWithStartAndEnd(start_position,end_position,page,pageSize,start_date);
+        if(tours.tours.length === 0){
+            return resp.status(StatusCode.ID_NOTFOUND).json({
+                success : false,
+                error : "Not Found !"
+            });
+        }
+        return resp.status(StatusCode.SUCCESS).json({
+            success : true,
+            tours
+        })
+       } catch (error) {
+        return resp.status(StatusCode.BAD_REQUEST).json({
+            success : false,
+            error : error.message
+        })
+       }
+        
     }
 }
 
