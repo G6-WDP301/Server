@@ -12,12 +12,6 @@ const tourController = {
                     error : "Can not set field empty !"
                 });
             }
-            if(!Validator.checkString(tour_name)){
-                return resp.status(400).json({
-                    success : false,
-                    error : "Tour name can not contain special character !"
-                });
-            }
             if(tour_price < 0){
                 return resp.status(400).json({
                     success : false,
