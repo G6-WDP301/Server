@@ -40,6 +40,11 @@ const User = mongoose.model("User", new Schema({
         type : Schema.Types.ObjectId,
         ref : "Role",
         require : true
+    },
+    "user_id" : {
+        type : Schema.Types.ObjectId,
+        ref : "User",
+        require : true
     }
 }))
 export default User;
