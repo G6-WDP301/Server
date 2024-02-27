@@ -28,7 +28,7 @@ const paymentController = {
                 message : "Payment successfully !"
             })
         } catch (error) {
-            return resp.statu(StatusCode.BAD_REQUEST).json({
+            return resp.status(StatusCode.BAD_REQUEST).json({
                 success : false,
                 error : error.message
             })
