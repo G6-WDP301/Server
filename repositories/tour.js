@@ -79,7 +79,7 @@ const tourRepository = {
             let totalDocs = 0;
             let pageCurrent = parseInt(page);
             let pageSize = parseInt(size);
-            if(start_position !== "" && end_position !== ""){
+            if(start_position !== undefined && end_position !== undefined){
                  tours = await Tour.find({
                     start_position,
                     end_position,
@@ -95,7 +95,8 @@ const tourRepository = {
                     }
                    
                 })
-            }else if (start_position !== "" && end_position === ""){
+            }else if (start_position !== undefined && end_position === undefined){
+                console.log("no end");
                  tours = await Tour.find({
                     start_position,
                     start_date : {
@@ -109,8 +110,9 @@ const tourRepository = {
                     }
                 })
             }else {
+                console.log("no end and start");
+
                  tours = await Tour.find({
-                    end_position,
                     start_date : {
                         $gte : start_date ? start_date : new Date()
                     }
