@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer"
 import { EMAIL } from "../constants/constants.js";
-import { FormatDate, FormatNumberToVND } from "../constants/common.js";
 
 const Mail = {
     sendMail: async (receiver,subject,content,html) => {
@@ -8,7 +7,7 @@ const Mail = {
             service: 'gmail',
             auth: {
                 user: EMAIL,
-                pass: 'jgiu ilxn twnj tstk'
+                pass: 'uxtg smmg wzku bxlt'
             }
         });
 
