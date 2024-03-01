@@ -84,41 +84,42 @@ const tourRepository = {
                     start_position,
                     end_position,
                     start_date : {
-                        $gte : start_date ? start_date : null
+                        $gte : start_date ? start_date : new Date()
                     }
                 }).populate(["start_position","end_position"]).limit(pageSize).skip(pageSize * (pageCurrent - 1));
                 totalDocs = await Tour.countDocuments({
                     start_position,
                     end_position,
                     start_date : {
-                        $gte : start_date ? start_date : null
+                        $gte : start_date ? start_date : new Date()
                     }
+                   
                 })
             }else if (start_position !== "" && end_position === ""){
                  tours = await Tour.find({
                     start_position,
                     start_date : {
-                        $gte : start_date ? start_date : null
+                        $gte : start_date ? start_date : new Date()
                     }
                 }).populate(["start_position","end_position"]).limit(pageSize).skip(pageSize * (pageCurrent - 1));
                 totalDocs = await Tour.countDocuments({
                     start_position,
                     start_date : {
-                        $gte : start_date ? start_date : null
+                        $gte : start_date ? start_date : new Date()
                     }
                 })
             }else {
                  tours = await Tour.find({
                     end_position,
                     start_date : {
-                        $gte : start_date ? start_date : null
+                        $gte : start_date ? start_date : new Date()
                     }
                     
                 }).populate(["start_position","end_position"]).limit(pageSize).skip(pageSize * (pageCurrent - 1));
                 totalDocs = await Tour.countDocuments({
                     end_position,
                     start_date : {
-                        $gte : start_date ? start_date : null
+                        $gte : start_date ? start_date : new Date()
                     }
                     
                 })
