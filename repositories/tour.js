@@ -83,31 +83,43 @@ const tourRepository = {
                  tours = await Tour.find({
                     start_position,
                     end_position,
-                    
+                    start_date : {
+                        $gte : start_date ? start_date : null
+                    }
                 }).populate(["start_position","end_position"]).limit(pageSize).skip(pageSize * (pageCurrent - 1));
                 totalDocs = await Tour.countDocuments({
                     start_position,
                     end_position,
-                    
+                    start_date : {
+                        $gte : start_date ? start_date : null
+                    }
                 })
             }else if (start_position !== "" && end_position === ""){
                  tours = await Tour.find({
                     start_position,
-                    
+                    start_date : {
+                        $gte : start_date ? start_date : null
+                    }
                 }).populate(["start_position","end_position"]).limit(pageSize).skip(pageSize * (pageCurrent - 1));
                 totalDocs = await Tour.countDocuments({
                     start_position,
                     start_date : {
-                        $gte : start_date ? start_date : ""
+                        $gte : start_date ? start_date : null
                     }
                 })
             }else {
                  tours = await Tour.find({
                     end_position,
+                    start_date : {
+                        $gte : start_date ? start_date : null
+                    }
                     
                 }).populate(["start_position","end_position"]).limit(pageSize).skip(pageSize * (pageCurrent - 1));
                 totalDocs = await Tour.countDocuments({
                     end_position,
+                    start_date : {
+                        $gte : start_date ? start_date : null
+                    }
                     
                 })
             }
