@@ -19,6 +19,10 @@ const Booking = mongoose.model("Booking", new Schema({
         type : Schema.Types.ObjectId,
         require : true,
         ref : "User"
+    },
+    "isPay" : {
+        type : Boolean,
+        default : false
     }
 }))
 export default Booking

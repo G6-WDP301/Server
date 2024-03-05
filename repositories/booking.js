@@ -21,6 +21,14 @@ const BookingRepository = {
             } catch (error) {
                 throw new Error(error);
             }
+        },
+        payTicketTour : async (tour_id, user_id) => {
+            try {
+               const updateBooking = await Booking.findOneAndUpdate({user_id,tour_id},{isPay : true})
+               return updateBooking;
+            } catch (error) {
+                throw new Error(error);
+            }
         }
 }
 

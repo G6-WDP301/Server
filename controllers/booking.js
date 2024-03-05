@@ -439,6 +439,38 @@ const BookingController = {
                 error : error
             })
         }
+    },
+    payTicketTour : async (req, resp) => {
+        try {
+            const {id} = req.params;
+            const {user_id} = req.body;
+            const checkPayStatus = await Booking.findOne({
+                tour_id : id,
+                user_id : user_id
+            });
+            if(!checkPayStatus){
+                return resp.status(StatusCode.BAD_REQUEST).json({
+                    success : false,
+                    error : "Not Found !"
+                })
+            }
+            const updateBooking = await BookingRepository.payTicketTour(id,user_id);
+            if(!updateBooking.isModified){
+                return resp.status(StatusCode.BAD_REQUEST).json({
+                    success : false,
+                    message : "Update not success"
+                })
+            }
+            return resp.status(StatusCode.SUCCESS).json({
+                success : false,
+                message : "Update successful !"
+            });
+        } catch (error) {
+            return resp.status(StatusCode.BAD_REQUEST).json({
+                success : false,
+                error : error.message
+            })
+        }
     }
 }
 
