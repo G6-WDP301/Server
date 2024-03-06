@@ -33,10 +33,11 @@ const BookingController = {
                     error : "You can not book this tour anymore because the tickets alreay sold all !"
                 })
             }
-            if(!Validator.CheckDate(checkTour.start_date,new Date())){
+            const dateNow = new Date();
+            if(!Validator.CheckDate(checkTour.start_date,dateNow.setDate(dateNow.getDate() - 1))){
                 return resp.status(StatusCode.BAD_REQUEST).json({
                     success : false,
-                    error : "Tour already start can not book any more !"
+                    error : "You must be book tour before 1 day when tour start !"
                 });
             }
             if(checkUser){
