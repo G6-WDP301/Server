@@ -1,4 +1,5 @@
 import Booking from "../models/booking.js"
+import Tour from "../models/tour.js";
 const BookingRepository = {
         BookTour : async (tour_id,user_id) => {
             try {
