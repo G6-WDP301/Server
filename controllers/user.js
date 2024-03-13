@@ -21,6 +21,19 @@ const userController = {
             });
         }
     },
+    getUserById: async (req, res) => {
+        try {
+            const user = await User.findById(req.params.id).exec()
+            res.status(200).json({
+                message: 'Get user by id successfully ~',
+                data: user
+            })
+        } catch (error) {
+            res.status(500).json({
+                message: 'Error:' + error.toString(),
+            });
+        }
+    },
     createAccount: async (req, resp) => {
         try {
             const { username, email, phoneNumber } = req.body;

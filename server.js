@@ -16,9 +16,6 @@ app.use('/api/user', userRouter)
 app.use('/api/booking', bookingRouter)
 
 
-
-
-
 // app.use('/products', routes.productRouter);
 // app.use('/categories', routes.categoryRouter);
 
