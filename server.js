@@ -3,7 +3,9 @@ import * as dotenv from 'dotenv';
 import connectDB from './database/database.js';
 // import routes from './routes/index.js';
 import cors from 'cors';
-import { tourRouter, locationRouter, scheduleRouter, transportionRouter, userRouter, bookingRouter, paymentRouter} from "./routes/index.js"
+import paypal from 'paypal-rest-sdk'
+import axios from 'axios'
+import { tourRouter, locationRouter, scheduleRouter, transportionRouter, userRouter, bookingRouter, paymentRouter } from "./routes/index.js"
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -16,9 +18,55 @@ app.use('/api/user', userRouter)
 app.use('/api/booking', bookingRouter)
 app.use('/api/payment', paymentRouter)
 
+paypal.configure({
+    'mode': 'sandbox',
+    'client_id': 'AdMHBYU2RiOqnT7Vp5k2DuzPeELNn24W8Qcg4r_qo3ki5c_BfNHitzLmpidkk4AAe3j4bqrWeB0UMgwE',
+    'client_secret': 'EKkJmxK4DiWbNb9K3KBJGU3LTJ9oDXynWOJkiGTI7UqiS-g5ha-rkneWEG6RQCvKBjHBdGtEwrvTBCHw'
+})
 
-// app.use('/products', routes.productRouter);
-// app.use('/categories', routes.categoryRouter);
+// Pay to money
+app.post('/pay', (req, res) => {
+    const create_payment_json = {
+        "intent": "sale",
+        "payer": {
+            "payment_method": "paypal"
+        },
+        "redirect_urls": {
+            "return_url": "http://localhost:5173/success",
+            "cancel_url": "http://localhost:5173/cancel"
+        },
+        "transactions": [{
+            "item_list": {
+                "items": [{
+                    "name": "Book tour",
+                    "sku": "001",
+                    "price": "1.00",
+                    "currency": "USD",
+                    "quantity": 1
+                }]
+            },
+            "amount": {
+                "currency": "USD",
+                "total": "1.00"
+            },
+            "description": "Chúc quý khách có một trải nghiệm tuyệt vời ~"
+        }]
+    };
+
+    paypal.payment.create(create_payment_json, function (error, payment) {
+        if (error) {
+            throw error;
+        } else {
+            for (let i = 0; i < payment.links.length; i++) {
+                if (payment.links[i].rel === 'approval_url') {
+                    res.redirect(payment.links[i].href);
+                }
+            }
+
+        }
+    });
+
+});
 
 const PORT = process.env.PORT || 9999;
 

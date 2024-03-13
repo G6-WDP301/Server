@@ -9,45 +9,45 @@ import Payment from "../models/payment.js";
 import { APPNAME } from "../constants/constants.js";
 import Validator from "../validator/validator.js"
 const BookingController = {
-    bookTour : async (req,resp) => {
+    bookTour: async (req, resp) => {
         try {
-            const {id}  = req.params;
-            const {user_id} = req.body;
+            const { id } = req.params;
+            const { user_id } = req.body;
             const checkUser = await Booking.findOne({
-                tour_id : id,
+                tour_id: id,
                 user_id
             });
             const checkTour = await Tour.findById({
-                _id : id
+                _id: id
             }).populate("start_position");
-            if(!checkTour){
+            if (!checkTour) {
                 return resp.status(StatusCode.BAD_REQUEST).json({
-                    success : false,
-                    error : "Tour is not exist !"
+                    success: false,
+                    error: "Tour is not exist !"
                 });
             }
-            if(!Validator.CheckDate(checkTour.start_date,new Date())){
+            if (!Validator.CheckDate(checkTour.start_date, new Date())) {
                 return resp.status(StatusCode.BAD_REQUEST).json({
-                    success : false,
-                    error : "Tour already start can not book any more !"
+                    success: false,
+                    error: "Tour already start can not book any more !"
                 });
             }
-            if(checkUser){
+            if (checkUser) {
                 return resp.status(StatusCode.BAD_REQUEST).json({
-                    success : false,
-                    error : "You already booked this tour !"
+                    success: false,
+                    error: "You already booked this tour !"
                 });
             }
-            const book = await BookingRepository.BookTour(id,user_id);
+            const book = await BookingRepository.BookTour(id, user_id);
             const user = await User.findById({
-                _id : user_id
+                _id: user_id
             })
 
             const mailContent = {
-                receiver : user.email,
-                subject : "Thông tin đặt tour trên G6Tour",
-                content : "",
-                html : `<!DOCTYPE html>
+                receiver: user.email,
+                subject: "Thông tin đặt tour trên G6Tour",
+                content: "",
+                html: `<!DOCTYPE html>
                 <html lang="en">
                 <head>
                     <meta charset="UTF-8">
@@ -205,57 +205,57 @@ const BookingController = {
                 </body>
                 </html>`
             }
-            Mail.sendMail(mailContent.receiver,mailContent.subject,mailContent.content,mailContent.html);
+            Mail.sendMail(mailContent.receiver, mailContent.subject, mailContent.content, mailContent.html);
             return resp.status(StatusCode.SUCCESS).json({
-                success : true,
-                message : "Booking tour successfully !",
+                success: true,
+                message: "Booking tour successfully !",
                 book
             });
         } catch (error) {
             return resp.status(StatusCode.BAD_REQUEST).json({
-                success : false,
-                error : error.message
+                success: false,
+                error: error.message
             })
         }
     },
-    cancelBookingTour : async (req,resp) => {
+    cancelBookingTour: async (req, resp) => {
         try {
-            const {id} = req.params;
-            const {user_id} = req.body;
+            const { id } = req.params;
+            const { user_id } = req.body;
             const checkPayStatus = await Booking.findOne({
-                tour_id : id,
-                user_id : user_id
+                tour_id: id,
+                user_id: user_id
             });
-            if(!checkPayStatus){
+            if (!checkPayStatus) {
                 return resp.status(StatusCode.BAD_REQUEST).json({
-                    success : false,
-                    error : "Not Found !"
+                    success: false,
+                    error: "Not Found !"
                 })
             }
-            if(!checkPayStatus.booking_status){
+            if (!checkPayStatus.booking_status) {
                 //Handle when user has been pay tour yet
-                await BookingRepository.cancelBookingTour(id,user_id);
+                await BookingRepository.cancelBookingTour(id, user_id);
                 return resp.status(StatusCode.SUCCESS).json({
-                    success : true,
-                    message : "Cancel tour success"
+                    success: true,
+                    message: "Cancel tour success"
                 })
             }
             // Handle when user was pay the tour
-            const tourInfor = await Tour.findById({_id : id}).populate(["start_position","end_position"]);
+            const tourInfor = await Tour.findById({ _id: id }).populate(["start_position", "end_position"]);
             // Delete payment history in payment table and delete booking tour in booking table
-           if(tourInfor.return_status){
-                await BookingRepository.cancelBookingTour(id,user_id);
+            if (tourInfor.return_status) {
+                await BookingRepository.cancelBookingTour(id, user_id);
                 await Payment.deleteOne({
                     user_id,
-                    tour_id : id
+                    tour_id: id
                 });
-                const user = await User.findById({_id : user_id})
+                const user = await User.findById({ _id: user_id })
                 //sending mail for user
                 const mailContent = {
-                    receiver : user.email,
-                    subject : `Thông tin hủy vé ở ${APPNAME}`,
-                    content : "",
-                    html : `<!DOCTYPE html>
+                    receiver: user.email,
+                    subject: `Thông tin hủy vé ở ${APPNAME}`,
+                    content: "",
+                    html: `<!DOCTYPE html>
                     <html lang="en">
                     <head>
                         <meta charset="UTF-8">
@@ -423,20 +423,20 @@ const BookingController = {
                     </body>
                     </html>`
                 }
-                Mail.sendMail(mailContent.receiver,mailContent.subject,mailContent.content,mailContent.html);
+                Mail.sendMail(mailContent.receiver, mailContent.subject, mailContent.content, mailContent.html);
                 return resp.status(StatusCode.SUCCESS).json({
-                    success : true,
-                    message : "Please check email to know information !"
+                    success: true,
+                    message: "Please check email to know information !"
                 })
-           }
-           return resp.status(StatusCode.BAD_REQUEST).json({
-            success : false,
-            error : "The ticket of this tour can not  return !"
-           })
+            }
+            return resp.status(StatusCode.BAD_REQUEST).json({
+                success: false,
+                error: "The ticket of this tour can not  return !"
+            })
         } catch (error) {
             return resp.status(StatusCode.BAD_REQUEST).json({
-                success : false,
-                error : error
+                success: false,
+                error: error
             })
         }
     }
