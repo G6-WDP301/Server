@@ -4,7 +4,6 @@ import scheduleRepository from "./schedule.js";
 import transportionRepository from "./transportion.js";
 import userRepository from "./user.js";
 import BookingRepository from "./booking.js";
-import paymentRepository from "./payment.js";
 export {
     locationRepository,
     tourRepository,
@@ -12,5 +11,4 @@ export {
     transportionRepository,
     userRepository,
     BookingRepository,
-    paymentRepository
 }

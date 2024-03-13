@@ -71,6 +71,24 @@ const Tour = mongoose.model("Tour", new Schema({
         type : Number,
         default : 0,
         require : true
+    },
+    "isAppove" : {
+        type : String,
+        enum : ['APPROVE','DECLINE','NOTAPPROVE'],
+        default : 'NOTAPPROVE'
+    },
+    "isActivate" : {
+        type : Boolean,
+        default : false
+    },
+    "ownerId" : {
+        type : Schema.Types.ObjectId,
+        ref : "User",
+        require : true
+    },
+    "reason" : {
+        type : String,
+        default : ""
     }
     
 }))

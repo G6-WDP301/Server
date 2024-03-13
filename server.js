@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 import connectDB from './database/database.js';
 // import routes from './routes/index.js';
 import cors from 'cors';
-import { tourRouter, locationRouter, scheduleRouter, transportionRouter, userRouter, bookingRouter, paymentRouter} from "./routes/index.js"
+import { tourRouter, locationRouter, scheduleRouter, transportionRouter, userRouter, bookingRouter} from "./routes/index.js"
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -14,7 +14,6 @@ app.use('/api/schedule', scheduleRouter)
 app.use('/api/transportion', transportionRouter)
 app.use('/api/user', userRouter)
 app.use('/api/booking', bookingRouter)
-app.use('/api/payment', paymentRouter)
 
 
 // app.use('/products', routes.productRouter);

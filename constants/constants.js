@@ -3,10 +3,16 @@ const ADMIN = "65aa44271de57d06c7f378a7";
 const PARTNER = "65aa44431de57d06c7f378a8";
 const EMAIL = "dinhhoan051102a@gmail.com";
 const APPNAME = "G6TOUR";
+const TIMEAUTODELETE = (minutes) => {
+    return minutes * 60 * 1000;
+}
+const TIMEDELETE = 30;
 export {
     ROLE_USER,
     ADMIN,
     PARTNER,
     EMAIL,
-    APPNAME
+    APPNAME,
+    TIMEAUTODELETE,
+    TIMEDELETE
 }
