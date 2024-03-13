@@ -79,7 +79,7 @@ const tourRepository = {
             let totalDocs = 0;
             let pageCurrent = parseInt(page);
             let pageSize = parseInt(size);
-            if(start_position !== undefined && end_position !== undefined){
+            if(start_position !== null && end_position !== null){
                  tours = await Tour.find({
                     start_position,
                     end_position,
@@ -95,7 +95,7 @@ const tourRepository = {
                     }
                    
                 })
-            }else if (start_position !== undefined && end_position === undefined){
+            }else if (start_position !== null && end_position === null){
                 console.log("no end");
                  tours = await Tour.find({
                     start_position,
