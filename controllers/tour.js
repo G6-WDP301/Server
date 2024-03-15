@@ -202,6 +202,28 @@ const tourController = {
         })
        }
         
+    },
+    findByTourName : async ( req,resp) => {
+        try {
+        const {page,pageSize,query} = req.query;
+        const tours = await tourRepository.findByTourName(query,page,pageSize);
+        if(tours.tours.length === 0){
+            return resp.status(404).json({
+                success : false,
+                error : "Not Found"
+            })
+        }
+        return resp.status(StatusCode.SUCCESS).json({
+            success : true,
+            tours : tours.tours,
+            totalPage : tours.totalPage
+        })
+        } catch (error) {
+            return resp.status(StatusCode.BAD_REQUEST).json({
+                success : false,
+                error : error.message
+            })
+        }
     }
 }
 

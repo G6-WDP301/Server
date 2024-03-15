@@ -80,18 +80,20 @@ const tourRepository = {
             let pageCurrent = parseInt(page);
             let pageSize = parseInt(size);
             if(start_position !== null && end_position !== null){
+                console.log("start end");
+
                  tours = await Tour.find({
                     start_position,
                     end_position,
                     start_date : {
-                        $gte : start_date ? start_date : new Date()
+                        $gt : start_date ? start_date : new Date()
                     }
                 }).populate(["start_position","end_position"]).limit(pageSize).skip(pageSize * (pageCurrent - 1));
                 totalDocs = await Tour.countDocuments({
                     start_position,
                     end_position,
                     start_date : {
-                        $gte : start_date ? start_date : new Date()
+                        $gt : start_date ? start_date : new Date()
                     }
                    
                 })
@@ -100,13 +102,13 @@ const tourRepository = {
                  tours = await Tour.find({
                     start_position,
                     start_date : {
-                        $gte : start_date ? start_date : new Date()
+                        $gt : start_date ? start_date : new Date()
                     }
                 }).populate(["start_position","end_position"]).limit(pageSize).skip(pageSize * (pageCurrent - 1));
                 totalDocs = await Tour.countDocuments({
                     start_position,
                     start_date : {
-                        $gte : start_date ? start_date : new Date()
+                        $gt : start_date ? start_date : new Date()
                     }
                 })
             }else {
@@ -114,14 +116,14 @@ const tourRepository = {
 
                  tours = await Tour.find({
                     start_date : {
-                        $gte : start_date ? start_date : new Date()
+                        $gt : start_date ? start_date : new Date()
                     }
                     
                 }).populate(["start_position","end_position"]).limit(pageSize).skip(pageSize * (pageCurrent - 1));
                 totalDocs = await Tour.countDocuments({
                     end_position,
                     start_date : {
-                        $gte : start_date ? start_date : new Date()
+                        $gt : start_date ? start_date : new Date()
                     }
                     
                 })
@@ -133,6 +135,37 @@ const tourRepository = {
             };
         } catch (error) {
             throw new Error(error)
+        }
+    },
+    findByTourName : async (tour_name,page,size) => {
+        try {
+            const text = tour_name
+            const pageSize = parseFloat(size)
+            const pageCurrent = parseFloat(page)
+
+            let totalPage = 0;
+            const totalDocs = await Tour.countDocuments({
+                tour_name : {$regex : text, $options : "i"},
+                start_date : {
+                    $gt : new Date()
+                }
+            });
+            const tours = await Tour.find({
+                tour_name : {$regex : text, $options : "i"},
+                start_date : {
+                    $gt : new Date()
+                }
+            }).populate(["start_position","end_position"]).skip(pageSize * (pageCurrent - 1)).limit(pageSize)
+            totalPage = Math.ceil(totalDocs / pageSize);
+            console.log(totalPage);
+            console.log(totalDocs + " " + pageSize);
+
+            return {
+                tours,
+                totalPage
+            };
+        } catch (error) {
+            throw new Error(error);
         }
     }
 }
