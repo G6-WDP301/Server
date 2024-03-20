@@ -274,6 +274,13 @@ const BookingController = {
                 error : error.message
             })
         }
+    },
+    getTotalBookingByTime : async (req,resp) => {
+        const {day} = req.query;
+        
+        return resp.status(StatusCode.SUCCESS).json({
+            result : BookingRepository.getTotalBookingByTime(day)
+        })
     }
 }
 async function cancelBookingTour (req,resp) {

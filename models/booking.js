@@ -23,6 +23,8 @@ const Booking = mongoose.model("Booking", new Schema({
     "isPay" : {
         type : Boolean,
         default : false
-    }
+    },
+},{
+    timestamps : true
 }))
 export default Booking

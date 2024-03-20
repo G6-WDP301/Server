@@ -224,6 +224,22 @@ const tourController = {
                 error : error.message
             })
         }
+    },
+    findTourByOwnerId : async (req,resp) => {
+        try {
+            const {id} = req.params;
+            const {status} = req.query
+            const tours = await tourRepository.getTourByUserId(id,status);
+            return  resp.status(StatusCode.SUCCESS).json({
+                success : true,
+                tours
+            })
+        } catch (error) {
+            return resp.status(StatusCode.BAD_REQUEST).json({
+                success : false,
+                error : error.message
+            })
+        }
     }
 }
 
