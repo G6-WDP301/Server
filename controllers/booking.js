@@ -297,7 +297,11 @@ const BookingController = {
     findTourBookedByUserId : async (req,resp) => {
         try {
             const {id} = req.params;
-            const {limit,page} = req.query
+            let {limit,page} = req.query
+            if(limit === undefined || page === undefined){
+                limit = 10;
+                page = 1;
+            }
             const tour = await Booking.find({user_id : id}).populate("tour_id").limit(limit).skip((page - 1) * limit);
             const tourDocs = await Booking.countDocuments({user_id : id});
             console.log(tourDocs);
