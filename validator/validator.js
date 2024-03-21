@@ -1,5 +1,5 @@
 const Validator = {
-    CheckDate : (dateInput,secondDate) => {
+      CheckDate : (dateInput,secondDate) => {
         const date = new Date(dateInput);
         const dateNow = new Date(secondDate);
         console.log("date 1 :" + date + " date 2 :" + dateNow);
