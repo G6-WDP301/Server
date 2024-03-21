@@ -54,11 +54,12 @@ const tourRepository = {
             throw new Error(error);
         }
     },
-    changeStatusTour: async (status, tour_id) => {
+    changeStatusTour: async (status, tour_id,reason) => {
         try {
             console.log(status + " " + tour_id);
             const tourUpdated = await Tour.updateOne({ _id: tour_id }, {
-                isAppove: status
+                isAppove: status,
+                reason : reason ? reason : ""
             })
             return tourUpdated;
         } catch (error) {
