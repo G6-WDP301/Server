@@ -281,7 +281,7 @@ const BookingController = {
             result: BookingRepository.getTotalBookingByTime(day)
         })
     },
-    getTourBookedByUserId: async (req, resp) => {
+    getAllTourBooked: async (req, resp) => {
         try {
             return resp.status(StatusCode.SUCCESS).json({
                 success: true,
@@ -291,6 +291,26 @@ const BookingController = {
             return resp.status(StatusCode.BAD_REQUEST).json({
                 error : error.message,
                 success : false
+            })
+        }
+    },
+    findTourBookedByUserId : async (req,resp) => {
+        try {
+            const {id} = req.params;
+            const {limit,page} = req.query
+            const tour = await Booking.find({user_id : id}).populate("tour_id").limit(limit).skip((page - 1) * limit);
+            const tourDocs = await Booking.countDocuments({user_id : id});
+            console.log(tourDocs);
+            const totalPage = Math.ceil(tourDocs / limit)
+            return resp.status(200).json({
+                success : true,
+                tour : tour,
+                totalPage
+            });
+        } catch (error) {
+            return resp.status(400).json({
+                success : false,
+                error : error.message
             })
         }
     }

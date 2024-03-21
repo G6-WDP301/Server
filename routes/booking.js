@@ -6,7 +6,8 @@ bookingRouter.get("/",BookingController.getTotalBookingByTime)
 bookingRouter.post("/:id",BookingController.bookTour)
 bookingRouter.delete("/cancel/:id",cancelBookingTour)
 bookingRouter.put("/pay/:id",BookingController.payTicketTour)
-bookingRouter.get("/all",BookingController.getTourBookedByUserId)
+bookingRouter.get("/all",BookingController.getAllTourBooked)
+bookingRouter.get("/user/:id",BookingController.findTourBookedByUserId)
 
 
 export default bookingRouter
