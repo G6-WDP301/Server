@@ -171,17 +171,7 @@ const tourRepository = {
     },
     getTourByUserId: async (userId, status) => {
         try {
-            switch (status) {
-                case "APPROVE": 
-                return await Tour.find({ ownerId: userId,isAppove : status }) 
-            
-                case "DECLINE": 
-                return await Tour.find({ ownerId: userId,isAppove : status }) 
-                
-                case "NOTAPPROVE": 
-                return await Tour.find({ ownerId: userId,isAppove : status })  
-                
-            }
+            return await Tour.find({ ownerId: userId,isAppove : status })  
         } catch (error) {
             throw new Error(error);
         }
