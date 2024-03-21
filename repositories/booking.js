@@ -62,7 +62,8 @@ const BookingRepository = {
             console.error('Failed to aggregate:', err);
             return null;
         }
-    }
+    },
+   
 }
 
 export default BookingRepository;

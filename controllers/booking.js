@@ -5,7 +5,6 @@ import Tour from "../models/tour.js";
 import User from "../models/user.js";
 import Mail from "../mail/mail.js";
 import { FormatDate, FormatNumberToVND } from "../constants/common.js";
-import Payment from "../models/payment.js";
 import { APPNAME, TIMEAUTODELETE, TIMEDELETE } from "../constants/constants.js";
 import Validator from "../validator/validator.js"
 const BookingController = {
@@ -52,10 +51,10 @@ const BookingController = {
             })
             setTimeout(async () => {
                 const checkPayStatus = await Booking.findById(book._id);
-                // if (checkPayStatus.isPay) {
-                //     console.log("You are paid this ticket");
-                //     return;
-                // }
+                if (checkPayStatus.isPay) {
+                    console.log("You are paid this ticket");
+                    return;
+                }
                 await Booking.deleteOne(book._id);
                 console.log("delete success");
                 return;
@@ -275,12 +274,25 @@ const BookingController = {
             })
         }
     },
-    getTotalBookingByTime : async (req,resp) => {
-        const {day} = req.query;
-        
+    getTotalBookingByTime: async (req, resp) => {
+        const { day } = req.query;
+
         return resp.status(StatusCode.SUCCESS).json({
-            result : BookingRepository.getTotalBookingByTime(day)
+            result: BookingRepository.getTotalBookingByTime(day)
         })
+    },
+    getTourBookedByUserId: async (req, resp) => {
+        try {
+            return resp.status(StatusCode.SUCCESS).json({
+                success: true,
+                tours: await Booking.find()
+            })
+        } catch (error) {
+            return resp.status(StatusCode.BAD_REQUEST).json({
+                error : error.message,
+                success : false
+            })
+        }
     }
 }
 async function cancelBookingTour(req, resp) {
@@ -492,7 +504,7 @@ async function cancelBookingTour(req, resp) {
         }
         return resp.status(StatusCode.BAD_REQUEST).json({
             success: false,
-            error: "The ticket of this tour can not return !"
+            error: "The ticket of this tour can not  return !"
         })
     } catch (error) {
         return resp.status(StatusCode.BAD_REQUEST).json({
