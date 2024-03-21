@@ -36,7 +36,7 @@ const tourRepository = {
     },
     findAll: async () => {
         try {
-            const tours = await Tour.find().populate(["start_position", "end_position"]);
+            const tours = await Tour.find().populate(["start_position", "end_position"]).sort({start_date : -1});
             return tours;
         } catch (error) {
             throw new Error(error);
