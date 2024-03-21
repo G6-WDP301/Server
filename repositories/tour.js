@@ -36,7 +36,7 @@ const tourRepository = {
     },
     findAll: async () => {
         try {
-            const tours = await Tour.find().populate(["start_position", "end_position"]);
+            const tours = await Tour.find().populate(["start_position", "end_position"]).sort({start_date : -1});
             return tours;
         } catch (error) {
             throw new Error(error);
@@ -54,11 +54,12 @@ const tourRepository = {
             throw new Error(error);
         }
     },
-    changeStatusTour: async (status, tour_id) => {
+    changeStatusTour: async (status, tour_id,reason) => {
         try {
             console.log(status + " " + tour_id);
             const tourUpdated = await Tour.updateOne({ _id: tour_id }, {
-                isAppove: status
+                isAppove: status,
+                reason : reason ? reason : ""
             })
             return tourUpdated;
         } catch (error) {

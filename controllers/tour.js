@@ -104,8 +104,8 @@ const tourController = {
     },
     changeStatusTour : async (req,resp) => {
         try {
-            const {tour_id,status} = req.body;
-            const tourUpdated = await tourRepository.changeStatusTour(status,tour_id);
+            const {tour_id,status,reason} = req.body;
+            const tourUpdated = await tourRepository.changeStatusTour(status,tour_id,reason);
             if(tourUpdated.matchedCount === 0){
                 return resp.status(400).json({
                     success : false,
