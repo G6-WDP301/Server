@@ -313,6 +313,21 @@ const BookingController = {
                 error : error.message
             })
         }
+    },
+    findMembersInATour : async (req,resp) => {
+        try {
+            const {id} = req.params;
+            const bookedTour = await Booking.find({tour_id : id}).populate({path : "user_id", select : '-password'})
+            return resp.status(StatusCode.SUCCESS).json({
+                success : true,
+                bookedTour
+            })
+        } catch (error) {
+            return resp.status(StatusCode.BAD_REQUEST).json({
+                success : false,
+                error : error.message
+            })
+        }
     }
 }
 async function cancelBookingTour(req, resp) {
