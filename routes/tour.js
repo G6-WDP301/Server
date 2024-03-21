@@ -6,10 +6,13 @@ const tourRouter = express.Router();
 tourRouter.post("/create",tourController.createTour)
 tourRouter.delete("/delete",tourController.deleteTour)
 tourRouter.get("/find-all",tourController.findAll)
-tourRouter.get("/:id",tourController.findATour)
+tourRouter.get("/search",tourController.findByTourName)
 tourRouter.put("/change_status",tourController.changeStatusTour)
+tourRouter.get("/:id",tourController.findATour)
+tourRouter.get("/owner/:id",tourController.findTourByOwnerId)
 tourRouter.put("/update/:id",tourController.updateTour)
 tourRouter.post("/get-list-search-tour",tourController.findTourWithStartAndEnd)
+
 
 
 

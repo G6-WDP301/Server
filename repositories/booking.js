@@ -30,6 +30,38 @@ const BookingRepository = {
         } catch (error) {
             throw new Error(error);
         }
+    },
+    getTotalBookingByTime: async (day) => {
+        try {
+            console.log(day);
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - day);
+            console.log(startDate);
+            const pipeline = [
+                {
+                    $match: {
+                        createdAt: { $gte: startDate.toDateString()} // Filter documents within the last 'day' days
+                    }
+                },
+                {
+                    $group: {
+                        _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt"} },
+                        count: { $sum: 1 } // Count documents for each day
+                    }
+                },
+                {
+                    $sort: { _id: 1 } // Sort by date
+                }
+            ];
+
+            const result = await Booking.aggregate(pipeline).exec();
+            console.log('Number of documents each day in the last 7 days:');
+            console.log(result);
+            return result;
+        } catch (err) {
+            console.error('Failed to aggregate:', err);
+            return null;
+        }
     }
 }
 

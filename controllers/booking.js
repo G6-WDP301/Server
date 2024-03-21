@@ -275,16 +275,12 @@ const BookingController = {
             })
         }
     },
-    allBooked: async (req, res) => {
-        try {
-            const allBooked = await Booking.find().exec();
-            res.status(200).json({
-                message: "Get all booking successfully",
-                data: allBooked
-            })
-        } catch (error) {
-            res.status(400).json({ success: false, error: error.message });
-        }
+    getTotalBookingByTime : async (req,resp) => {
+        const {day} = req.query;
+        
+        return resp.status(StatusCode.SUCCESS).json({
+            result : BookingRepository.getTotalBookingByTime(day)
+        })
     }
 }
 async function cancelBookingTour(req, resp) {
