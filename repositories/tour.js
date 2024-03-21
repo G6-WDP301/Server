@@ -3,7 +3,7 @@ import Tour from "../models/tour.js"
 const tourRepository = {
     createTour : async (tourInfor) => {
         try {
-            const {user_id,tour_name,tour_description,tour_price,tour_img,max_tourist,start_date,end_date,start_position,end_position,duration,tour_transportion,return_status,return_tax} = tourInfor;
+            const {ownerId,tour_name,tour_description,tour_price,tour_img,max_tourist,start_date,end_date,start_position,end_position,duration,tour_transportion,return_status,return_tax} = tourInfor;
             const tourSaved = await Tour.create({
                 tour_name ,
                 tour_description ,
@@ -18,7 +18,7 @@ const tourRepository = {
                 tour_transportion,
                 return_status,
                 return_tax,
-                user_id
+                ownerId
             });
             return tourSaved;
         } catch (error) {
@@ -79,46 +79,49 @@ const tourRepository = {
             let totalDocs = 0;
             let pageCurrent = parseInt(page);
             let pageSize = parseInt(size);
-            if(start_position !== "" && end_position !== ""){
+            if(start_position !== null && end_position !== null){
                  tours = await Tour.find({
                     start_position,
                     end_position,
                     start_date : {
-                        $gte : start_date ? start_date : null
+                        $gte : start_date ? start_date : new Date()
                     }
                 }).populate(["start_position","end_position"]).limit(pageSize).skip(pageSize * (pageCurrent - 1));
                 totalDocs = await Tour.countDocuments({
                     start_position,
                     end_position,
                     start_date : {
-                        $gte : start_date ? start_date : null
+                        $gte : start_date ? start_date : new Date()
                     }
+                   
                 })
-            }else if (start_position !== "" && end_position === ""){
+            }else if (start_position !== null && end_position === null){
+                console.log("no end");
                  tours = await Tour.find({
                     start_position,
                     start_date : {
-                        $gte : start_date ? start_date : null
+                        $gte : start_date ? start_date : new Date()
                     }
                 }).populate(["start_position","end_position"]).limit(pageSize).skip(pageSize * (pageCurrent - 1));
                 totalDocs = await Tour.countDocuments({
                     start_position,
                     start_date : {
-                        $gte : start_date ? start_date : null
+                        $gte : start_date ? start_date : new Date()
                     }
                 })
             }else {
+                console.log("no end and start");
+
                  tours = await Tour.find({
-                    end_position,
                     start_date : {
-                        $gte : start_date ? start_date : null
+                        $gte : start_date ? start_date : new Date()
                     }
                     
                 }).populate(["start_position","end_position"]).limit(pageSize).skip(pageSize * (pageCurrent - 1));
                 totalDocs = await Tour.countDocuments({
                     end_position,
                     start_date : {
-                        $gte : start_date ? start_date : null
+                        $gte : start_date ? start_date : new Date()
                     }
                     
                 })
