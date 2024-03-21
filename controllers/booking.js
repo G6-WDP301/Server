@@ -5,66 +5,65 @@ import Tour from "../models/tour.js";
 import User from "../models/user.js";
 import Mail from "../mail/mail.js";
 import { FormatDate, FormatNumberToVND } from "../constants/common.js";
-import Payment from "../models/payment.js";
 import { APPNAME, TIMEAUTODELETE, TIMEDELETE } from "../constants/constants.js";
 import Validator from "../validator/validator.js"
 const BookingController = {
-    bookTour : async (req,resp) => {
+    bookTour: async (req, resp) => {
         try {
-            const {id}  = req.params;
-            const {user_id} = req.body;
+            const { id } = req.params;
+            const { user_id } = req.body;
             const checkUser = await Booking.findOne({
-                tour_id : id,
+                tour_id: id,
                 user_id
             });
             const checkTour = await Tour.findById({
-                _id : id
+                _id: id
             }).populate("start_position");
-            const numbersTichketAlready = await Booking.find({tour_id : id,isPay : true});
-            if(!checkTour){
+            const numbersTichketAlready = await Booking.find({ tour_id: id, isPay: true });
+            if (!checkTour) {
                 return resp.status(StatusCode.BAD_REQUEST).json({
-                    success : false,
-                    error : "Tour is not exist !"
+                    success: false,
+                    error: "Tour is not exist !"
                 });
             }
-            if(numbersTichketAlready.length >= checkTour.max_tourist) {
+            if (numbersTichketAlready.length >= checkTour.max_tourist) {
                 return resp.status(StatusCode.BAD_REQUEST).json({
-                    success : false,
-                    error : "You can not book this tour anymore because the tickets alreay sold all !"
+                    success: false,
+                    error: "You can not book this tour anymore because the tickets alreay sold all !"
                 })
             }
             const dateNow = new Date();
-            if(!Validator.CheckDate(checkTour.start_date,dateNow.setDate(dateNow.getDate() - 1))){
+            if (!Validator.CheckDate(checkTour.start_date, dateNow.setDate(dateNow.getDate() - 1))) {
                 return resp.status(StatusCode.BAD_REQUEST).json({
-                    success : false,
-                    error : "You must be book tour before 1 day when tour start !"
+                    success: false,
+                    error: "You must be book tour before 1 day when tour start !"
                 });
             }
-            if(checkUser){
+            if (checkUser) {
                 return resp.status(StatusCode.BAD_REQUEST).json({
-                    success : false,
-                    error : "You already booked this tour !"
+                    success: false,
+                    error: "You already booked this tour !"
                 });
             }
-            const book = await BookingRepository.BookTour(id,user_id);
+            const book = await BookingRepository.BookTour(id, user_id);
             const user = await User.findById({
-                _id : user_id
+                _id: user_id
             })
-            setTimeout( async () => {
-               const checkPayStatus = await Booking.findById(book._id);
-               if(checkPayStatus.isPay){
-                console.log("You are paid this ticket");
-               return ;
-               }
-               await Booking.deleteOne(book._id);
-               console.log("delete success");
-               return ;
-            },TIMEAUTODELETE(TIMEDELETE));
+            setTimeout(async () => {
+                const checkPayStatus = await Booking.findById(book._id);
+                if (checkPayStatus.isPay) {
+                    console.log("You are paid this ticket");
+                    return;
+                }
+                await Booking.deleteOne(book._id);
+                console.log("delete success");
+                return;
+            }, TIMEAUTODELETE(TIMEDELETE));
             const mailContent = {
-                receiver : user.email,
-                subject : "Thông tin đặt tour trên G6Tour",
-                content : "",
-                html : `<!DOCTYPE html>
+                receiver: user.email,
+                subject: "Thông tin đặt tour trên G6Tour",
+                content: "",
+                html: `<!DOCTYPE html>
                 <html lang="en">
                 <head>
                     <meta charset="UTF-8">
@@ -229,94 +228,107 @@ const BookingController = {
                 </body>
                 </html>`
             }
-            Mail.sendMail(mailContent.receiver,mailContent.subject,mailContent.content,mailContent.html);
-            
+            Mail.sendMail(mailContent.receiver, mailContent.subject, mailContent.content, mailContent.html);
+
             return resp.status(StatusCode.SUCCESS).json({
-                success : true,
-                message : "Booking tour successfully !",
+                success: true,
+                message: "Booking tour successfully !",
                 book
             });
         } catch (error) {
             return resp.status(StatusCode.BAD_REQUEST).json({
-                success : false,
-                error : error.message
+                success: false,
+                error: error.message
             })
         }
     },
-    payTicketTour : async (req, resp) => {
+    payTicketTour: async (req, resp) => {
         try {
-            const {id} = req.params;
-            const {user_id} = req.body;
+            const { id } = req.params;
+            const { user_id } = req.body;
             const checkPayStatus = await Booking.findOne({
-                tour_id : id,
-                user_id : user_id
+                tour_id: id,
+                user_id: user_id
             });
-            if(!checkPayStatus){
+            if (!checkPayStatus) {
                 return resp.status(StatusCode.BAD_REQUEST).json({
-                    success : false,
-                    error : "Not Found !"
+                    success: false,
+                    error: "Not Found !"
                 })
             }
-            const updateBooking = await BookingRepository.payTicketTour(id,user_id);
-            if(!updateBooking.isModified){
+            const updateBooking = await BookingRepository.payTicketTour(id, user_id);
+            if (!updateBooking.isModified) {
                 return resp.status(StatusCode.BAD_REQUEST).json({
-                    success : false,
-                    message : "Update not success"
+                    success: false,
+                    message: "Update not success"
                 })
             }
             return resp.status(StatusCode.SUCCESS).json({
-                success : false,
-                message : "Update successful !"
+                success: false,
+                message: "Update successful !"
             });
         } catch (error) {
             return resp.status(StatusCode.BAD_REQUEST).json({
-                success : false,
-                error : error.message
+                success: false,
+                error: error.message
             })
         }
     },
-    getTotalBookingByTime : async (req,resp) => {
-        const {day} = req.query;
-        
+    getTotalBookingByTime: async (req, resp) => {
+        const { day } = req.query;
+
         return resp.status(StatusCode.SUCCESS).json({
-            result : BookingRepository.getTotalBookingByTime(day)
+            result: BookingRepository.getTotalBookingByTime(day)
         })
-    }
-}
-async function cancelBookingTour (req,resp) {
-    try {
-        const {id} = req.params;
-        const {user_id} = req.body;
-        const checkPayStatus = await Booking.findOne({
-            tour_id : id,
-            user_id : user_id
-        });
-        if(!checkPayStatus){
+    },
+    getTourBookedByUserId: async (req, resp) => {
+        try {
+            return resp.status(StatusCode.SUCCESS).json({
+                success: true,
+                tours: await Booking.find()
+            })
+        } catch (error) {
             return resp.status(StatusCode.BAD_REQUEST).json({
-                success : false,
-                error : "Not Found !"
+                error : error.message,
+                success : false
             })
         }
-        if(!checkPayStatus.booking_status){
+    }
+}
+async function cancelBookingTour(req, resp) {
+    try {
+        const { id } = req.params;
+        const { user_id } = req.body;
+        const checkPayStatus = await Booking.findOne({
+            tour_id: id,
+            user_id: user_id
+        });
+        if (!checkPayStatus) {
+            return resp.status(StatusCode.BAD_REQUEST).json({
+                success: false,
+                error: "Not Found !"
+            })
+        }
+        if (!checkPayStatus.booking_status) {
             //Handle when user has been pay tour yet
-            await BookingRepository.cancelBookingTour(id,user_id);
+            await BookingRepository.cancelBookingTour(id, user_id);
             return resp.status(StatusCode.SUCCESS).json({
-                success : true,
-                message : "Cancel tour success"
+                success: true,
+                message: "Cancel tour success"
             })
         }
         // Handle when user was pay the tour
-        const tourInfor = await Tour.findById({_id : id}).populate(["start_position","end_position"]);
+        const tourInfor = await Tour.findById({ _id: id }).populate(["start_position", "end_position"]);
         // Delete payment history in payment table and delete booking tour in booking table
-       if(tourInfor.return_status){
-            await BookingRepository.cancelBookingTour(id,user_id);
-            const user = await User.findById({_id : user_id})
+        if (tourInfor.return_status) {
+            await BookingRepository.cancelBookingTour(id, user_id);
+            const user = await User.findById({ _id: user_id })
             //sending mail for user
             const mailContent = {
-                receiver : user.email,
-                subject : `Thông tin hủy vé ở ${APPNAME}`,
-                content : "",
-                html : `<!DOCTYPE html>
+                receiver: user.email,
+                subject: `Thông tin hủy vé ở ${APPNAME}`,
+                content: "",
+                html: `<!DOCTYPE html>
                 <html lang="en">
                 <head>
                     <meta charset="UTF-8">
@@ -484,20 +496,20 @@ async function cancelBookingTour (req,resp) {
                 </body>
                 </html>`
             }
-            Mail.sendMail(mailContent.receiver,mailContent.subject,mailContent.content,mailContent.html);
+            Mail.sendMail(mailContent.receiver, mailContent.subject, mailContent.content, mailContent.html);
             return resp.status(StatusCode.SUCCESS).json({
-                success : true,
-                message : "Please check email to know information !"
+                success: true,
+                message: "Please check email to know information !"
             })
-       }
-       return resp.status(StatusCode.BAD_REQUEST).json({
-        success : false,
-        error : "The ticket of this tour can not  return !"
-       })
+        }
+        return resp.status(StatusCode.BAD_REQUEST).json({
+            success: false,
+            error: "The ticket of this tour can not  return !"
+        })
     } catch (error) {
         return resp.status(StatusCode.BAD_REQUEST).json({
-            success : false,
-            error : error
+            success: false,
+            error: error
         })
     }
 }
