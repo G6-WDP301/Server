@@ -7,7 +7,7 @@ const Tour = mongoose.model("Tour", new Schema({
     },
     "tour_description": {
         type: String,
-        required: true,
+        required: false,
     },
     "tour_transportion" : [
         {
