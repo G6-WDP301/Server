@@ -59,6 +59,7 @@ const BookingController = {
                 console.log("delete success");
                 return;
             }, TIMEAUTODELETE(TIMEDELETE));
+            const url = "http://localhost:5173/payment/";
             const mailContent = {
                 receiver: user.email,
                 subject: "Thông tin đặt tour trên G6Tour",
@@ -179,6 +180,14 @@ const BookingController = {
                                                     Booking của quý khách đã được chúng tôi xác nhận thành công
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td class="m_7894734060713233746td-left">
+                                                    Thanh toán:
+                                                </td>
+                                                <td class="m_7894734060713233746td-right" style="color:#c50000;font-weight:bold">                                 
+                                                   <a href="${url + checkTour._id}}">Bấm vào đây để thanh toán</a>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </td>
@@ -289,47 +298,52 @@ const BookingController = {
             })
         } catch (error) {
             return resp.status(StatusCode.BAD_REQUEST).json({
-                error: error.message,
-                success: false
+                error : error.message,
+                success : false
             })
         }
     },
-    findTourBookedByUserId: async (req, resp) => {
+    findTourBookedByUserId : async (req,resp) => {
         try {
-            const { id } = req.params;
-            let { limit, page } = req.query
-            if (limit === undefined || page === undefined) {
+            const {id} = req.params;
+            let {limit,page,status} = req.query
+            
+            if(limit === undefined || page === undefined ){
                 limit = 10;
                 page = 1;
             }
-            const tour = await Booking.find({ user_id: id }).populate("tour_id").limit(limit).skip((page - 1) * limit);
-            const tourDocs = await Booking.countDocuments({ user_id: id });
+            if(status === undefined){
+                status = false;
+            }
+
+            const tour = await Booking.find({user_id : id,isPay : status}).populate("tour_id").limit(limit).skip((page - 1) * limit);
+            const tourDocs = await Booking.countDocuments({user_id : id});
             console.log(tourDocs);
             const totalPage = Math.ceil(tourDocs / limit)
             return resp.status(200).json({
-                success: true,
-                tour: tour,
+                success : true,
+                tour : tour,
                 totalPage
             });
         } catch (error) {
             return resp.status(400).json({
-                success: false,
-                error: error.message
+                success : false,
+                error : error.message
             })
         }
     },
-    findMembersInATour: async (req, resp) => {
+    findMembersInATour : async (req,resp) => {
         try {
-            const { id } = req.params;
-            const bookedTour = await Booking.find({ tour_id: id }).populate({ path: "user_id", select: '-password' })
+            const {id} = req.params;
+            const bookedTour = await Booking.find({tour_id : id}).populate({path : "user_id", select : '-password'})
             return resp.status(StatusCode.SUCCESS).json({
-                success: true,
+                success : true,
                 bookedTour
             })
         } catch (error) {
             return resp.status(StatusCode.BAD_REQUEST).json({
-                success: false,
-                error: error.message
+                success : false,
+                error : error.message
             })
         }
     }

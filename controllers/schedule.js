@@ -1,3 +1,4 @@
+import StatusCode from "../constants/statusCode.js";
 import Schedule from "../models/schedule.js";
 import Tour from "../models/tour.js";
 import { scheduleRepository } from "../repositories/index.js";
@@ -104,6 +105,33 @@ const scheduleController = {
                 success: false,
                 error: error.message
             });
+        }
+    },
+    updateSchedule : async (req,resp ) => {
+        try {
+            const {id} = req.params;
+            const {schedule_name,schedule_detail,schedule_date} = req.body;
+            if(!Validator.CheckDate(schedule_date,new Date())){
+                return resp.status(400).json({
+                    success : false,
+                    error : "Schedule Date must be greater than now"
+                });
+            }
+            const scheduleUpdated = await Schedule.updateOne({_id : id},{ $set : {
+                schedule_date,
+                schedule_name,
+                schedule_detail
+            }
+            });
+            return resp.status(StatusCode.SUCCESS).json({
+                success : true,
+                message : "Update success"
+            })
+        } catch (error) {
+            return resp.status(StatusCode.BAD_REQUEST).json({
+                success : false,
+                error : error.message
+            })
         }
     }
 }
