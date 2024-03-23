@@ -185,7 +185,7 @@ const BookingController = {
                                                     Thanh toán:
                                                 </td>
                                                 <td class="m_7894734060713233746td-right" style="color:#c50000;font-weight:bold">                                 
-                                                   <a href="${url + checkTour._id}}">Bấm vào đây để thanh toán</a>
+                                                   <a href="${url + id}}">Bấm vào đây để thanh toán</a>
                                                 </td>
                                             </tr>
                                         </tbody>
