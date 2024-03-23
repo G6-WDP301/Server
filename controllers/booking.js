@@ -59,7 +59,7 @@ const BookingController = {
                 console.log("delete success");
                 return;
             }, TIMEAUTODELETE(TIMEDELETE));
-            const url = "http://localhost:5173/payment/";
+            const url = `http://localhost:5173/payment/${id}`;
             const mailContent = {
                 receiver: user.email,
                 subject: "Thông tin đặt tour trên G6Tour",
@@ -185,7 +185,7 @@ const BookingController = {
                                                     Thanh toán:
                                                 </td>
                                                 <td class="m_7894734060713233746td-right" style="color:#c50000;font-weight:bold">                                 
-                                                   <a href="${url + id}}">Bấm vào đây để thanh toán</a>
+                                                   <a href="${url}">Bấm vào đây để thanh toán</a>
                                                 </td>
                                             </tr>
                                         </tbody>
