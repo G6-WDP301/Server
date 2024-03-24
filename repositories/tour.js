@@ -1,5 +1,8 @@
+import Booking from "../models/booking.js";
+import BookingHistory from "../models/bookingHistory.js";
 import Schedule from "../models/schedule.js";
 import Tour from "../models/tour.js"
+import BookingRepository from "./booking.js";
 const tourRepository = {
     createTour: async (tourInfor) => {
         try {
@@ -44,7 +47,7 @@ const tourRepository = {
     },
     findATour: async (tour_id) => {
         try {
-            const tour = await Tour.findById(tour_id).populate(["start_position", "end_position", "tour_transportion"]);
+            const tour = await Tour.findById(tour_id).populate(["start_position", "end_position", "tour_transportion",""]);
             const scheduleOfTour = await Schedule.find({ tour_id });
             return {
                 tour,
@@ -68,8 +71,32 @@ const tourRepository = {
     },
     updateTour: async (tourInfor, tour_id) => {
         try {
-            const tourUpdated = await Tour.updateOne({ _id: tour_id }, tourInfor);
+            const tour = await Tour.findById(tour_id)
+            const dateCurrent = new Date();
+            dateCurrent.setHours(0,0,0,0);
+            const dateTour = new Date(tour.start_date);
+            dateTour.setHours(0,0,0,0);
+            if(dateTour <= dateCurrent){
+                const tourUpdated = await Tour.updateOne({ _id: tour_id }, {
+                    $set : {
+                        start_date : tourInfor.start_date,
+                        isAppove : "NOTAPPROVE",
+                        max_tourist : tourInfor.max_tourist,
+                        tour_name : tourInfor.tour_name,
+                        discount : tourInfor.discount,
+                        end_date : tourInfor.end_date,
+                        duration : tourInfor.duration
+                    }
+                });
+                const membersBookedTour = await Booking.find({tour_id : tour_id});
+                membersBookedTour.forEach(item => { BookingHistory.create({
+                    tour_id : item.tour_id,
+                    user_id : item.user_id
+                })})
+                await Booking.deleteMany({tour_id : tour._id})
             return tourUpdated;
+            }
+            return null
         } catch (error) {
             throw new Error(error);
         }

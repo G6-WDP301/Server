@@ -2,6 +2,7 @@ import tourRepository from "../repositories/tour.js";
 import Validator from "../validator/validator.js";
 import StatusCode from "../constants/statusCode.js"
 import MessageError from "../constants/messageError.js"
+import Tour from "../models/tour.js";
 const tourController = {
     createTour : async (req,resp) => {
         try {
@@ -135,13 +136,8 @@ const tourController = {
     updateTour : async (req,resp) => {
         const { id } = req.params;
         try {
-            const {tour_name,tour_description,tour_price,tour_img,max_tourist,start_date,start_position,end_position,duration,tour_transportion} = req.body;
-            if(!tour_name || !tour_description  || !tour_img || !max_tourist || !start_date || !start_position || !end_position || !duration || !tour_transportion){
-                return resp.status(400).json({
-                    success : false,
-                    error : "Can not set field empty !"
-                });
-            }
+            const {tour_price,max_tourist,start_date} = req.body;
+            
             if(tour_price < 0){
                 return resp.status(400).json({
                     success : false,
@@ -162,13 +158,14 @@ const tourController = {
                     error : "Start Date must be greater than now !"
                 })
             }
-            const tourUpdated = await tourRepository.updateTour(req.body,id);
-            if(tourUpdated.matchedCount === 0){
-                return resp.status(400).json({
+            const tour = await Tour.findById(id)
+            if(tour.start_date > new Date()){
+                return resp.status(StatusCode.BAD_REQUEST).json({
                     success : false,
-                    error : "ID not exist !"
+                    error : "Update Failed !"
                 })
             }
+            const tourUpdated = await tourRepository.updateTour(req.body,id);
             return resp.status(200).json({
                 success : true,
                 message : "Updated successfully !"
