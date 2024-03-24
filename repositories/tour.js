@@ -175,15 +175,11 @@ const tourRepository = {
             let totalPage = 0;
             const totalDocs = await Tour.countDocuments({
                 tour_name: { $regex: text, $options: "i" },
-                start_date: {
-                    $gt: new Date()
-                }
+                
             });
             const tours = await Tour.find({
                 tour_name: { $regex: text, $options: "i" },
-                start_date: {
-                    $gt: new Date()
-                }
+                
             }).populate(["start_position", "end_position"]).skip(pageSize * (pageCurrent - 1)).limit(pageSize)
             totalPage = Math.ceil(totalDocs / pageSize);
             console.log(totalPage);
