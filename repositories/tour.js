@@ -47,7 +47,7 @@ const tourRepository = {
     },
     findATour: async (tour_id) => {
         try {
-            const tour = await Tour.findById(tour_id).populate(["start_position", "end_position", "tour_transportion",""]);
+            const tour = await Tour.findById(tour_id).populate(["start_position", "end_position", "tour_transportion"]);
             const scheduleOfTour = await Schedule.find({ tour_id });
             return {
                 tour,
@@ -171,13 +171,13 @@ const tourRepository = {
             const text = tour_name
             const pageSize = parseFloat(size)
             const pageCurrent = parseFloat(page)
-
+            
             let totalPage = 0;
             const totalDocs = await Tour.countDocuments({
                 tour_name: { $regex: text, $options: "i" },
                 
             });
-            const tours = await Tour.find({
+            const tours = await Tour.find({isAppove : status,
                 tour_name: { $regex: text, $options: "i" },
                 
             }).populate(["start_position", "end_position"]).skip(pageSize * (pageCurrent - 1)).limit(pageSize)

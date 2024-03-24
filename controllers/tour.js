@@ -202,7 +202,12 @@ const tourController = {
     },
     findByTourName : async ( req,resp) => {
         try {
-        const {page,pageSize,query} = req.query;
+        let {page,pageSize,query} = req.query;
+        if(page === undefined || pageSize === undefined || query === undefined){
+            page = 1;
+            pageSize = 10;
+            query = "";
+        }
         const tours = await tourRepository.findByTourName(query,page,pageSize);
         if(tours.tours.length === 0){
             return resp.status(404).json({
