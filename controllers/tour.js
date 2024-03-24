@@ -242,6 +242,34 @@ const tourController = {
                 error : error.message
             })
         }
+    },
+    GetChartDetail : async (req,resp) => {
+        try {
+            const tours = await Tour.countDocuments();
+            const toursOutDate = await Tour.countDocuments({
+                start_date : {
+                    $lte : new Date()
+                }
+            })
+            const toursComming = await Tour.countDocuments({
+                start_date : {
+                    $gte : new Date()
+                }
+            })
+            return resp.status(StatusCode.SUCCESS).json({
+                success : true,
+                data : {
+                    tours,
+                    toursOutDate,
+                    toursComming
+                }
+            })
+        } catch (error) {
+            return resp.status(StatusCode.BAD_REQUEST).json({
+                success : false,
+                error : error?.message
+            })
+        }
     }
 }
 
