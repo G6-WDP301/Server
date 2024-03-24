@@ -34,10 +34,6 @@ const Tour = mongoose.model("Tour", new Schema({
         type: Number,
         required: true,
     },
-    "status": {
-        type: Boolean,
-        default : false,
-    },
     "start_date": {
         type: Date,
         required: true,
