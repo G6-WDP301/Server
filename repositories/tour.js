@@ -171,7 +171,7 @@ const tourRepository = {
             const text = tour_name
             const pageSize = parseFloat(size)
             const pageCurrent = parseFloat(page)
-            
+            console.log(text);
             let totalPage = 0;
             const totalDocs = await Tour.countDocuments({
                 tour_name: { $regex: text, $options: "i" },
