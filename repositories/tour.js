@@ -177,7 +177,7 @@ const tourRepository = {
                 tour_name: { $regex: text, $options: "i" },
                 
             });
-            const tours = await Tour.find({isAppove : status,
+            const tours = await Tour.find({
                 tour_name: { $regex: text, $options: "i" },
                 
             }).populate(["start_position", "end_position"]).skip(pageSize * (pageCurrent - 1)).limit(pageSize)
