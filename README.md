@@ -1,4 +1,9 @@
-# How to run server of the project
+### How to run the project
+
+```javascript
 npm i
-and 
+```
+and
+```javascript
 npm run dev
+```
